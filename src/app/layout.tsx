@@ -7,12 +7,13 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "DevTrack — Developer Productivity Dashboard",
-  description: "Track coding habits, visualize GitHub contributions, and hit your goals.",
-  
+  description:
+    "Track coding habits, visualize GitHub contributions, and hit your goals.",
+
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",  
+    apple: "/apple-touch-icon.png",
   },
 };
 

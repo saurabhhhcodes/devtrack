@@ -17,7 +17,15 @@ function getPeriodStart(recurrence: Recurrence): string {
     return monday.toISOString();
   }
   if (recurrence === "monthly") {
-    return new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0).toISOString();
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1,
+      0,
+      0,
+      0,
+      0,
+    ).toISOString();
   }
   return new Date(0).toISOString(); // 'none' never resets
 }
@@ -47,7 +55,9 @@ export async function GET() {
     (goals ?? []).map(async (goal) => {
       if (goal.recurrence === "none") return goal;
 
-      const periodStart = new Date(getPeriodStart(goal.recurrence as Recurrence));
+      const periodStart = new Date(
+        getPeriodStart(goal.recurrence as Recurrence),
+      );
       const storedPeriodStart = goal.period_start
         ? new Date(goal.period_start)
         : new Date(0);
@@ -59,11 +69,17 @@ export async function GET() {
           .eq("id", goal.id)
           .select()
           .single();
-        return updated ?? { ...goal, current: 0, period_start: periodStart.toISOString() };
+        return (
+          updated ?? {
+            ...goal,
+            current: 0,
+            period_start: periodStart.toISOString(),
+          }
+        );
       }
 
       return goal;
-    })
+    }),
   );
 
   return Response.json({ goals: processedGoals });
@@ -83,12 +99,18 @@ export async function POST(req: Request) {
   };
 
   if (!body.title || !body.target) {
-    return Response.json({ error: "title and target required" }, { status: 400 });
+    return Response.json(
+      { error: "title and target required" },
+      { status: 400 },
+    );
   }
 
   const recurrence: Recurrence = body.recurrence ?? "none";
   if (!["none", "weekly", "monthly"].includes(recurrence)) {
-    return Response.json({ error: "Invalid recurrence value" }, { status: 400 });
+    return Response.json(
+      { error: "Invalid recurrence value" },
+      { status: 400 },
+    );
   }
 
   const { data: user } = await supabaseAdmin

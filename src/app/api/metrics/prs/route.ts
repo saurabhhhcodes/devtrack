@@ -25,7 +25,7 @@ async function fetchPRMetrics(token: string): Promise<PRMetricsBase> {
     {
       headers: { Authorization: `Bearer ${token}` },
       cache: "no-store",
-    }
+    },
   );
 
   if (!searchRes.ok) {
@@ -34,7 +34,11 @@ async function fetchPRMetrics(token: string): Promise<PRMetricsBase> {
 
   const data = (await searchRes.json()) as {
     total_count: number;
-    items: Array<{ state: string; created_at: string; closed_at: string | null }>;
+    items: Array<{
+      state: string;
+      created_at: string;
+      closed_at: string | null;
+    }>;
   };
 
   const open = data.items.filter((pr) => pr.state === "open").length;
@@ -48,7 +52,7 @@ async function fetchPRMetrics(token: string): Promise<PRMetricsBase> {
             sum +
             (new Date(pr.closed_at!).getTime() -
               new Date(pr.created_at).getTime()),
-          0
+          0,
         ) / closedPRs.length
       : 0;
 
@@ -68,9 +72,7 @@ function formatPRMetrics(metrics: PRMetricsBase) {
     total: metrics.total,
     avgReviewHours: metrics.avgReviewHours,
     mergeRate:
-      metrics.total > 0
-        ? `${Math.round(metrics.mergeRate * 100)}%`
-        : "0%",
+      metrics.total > 0 ? `${Math.round(metrics.mergeRate * 100)}%` : "0%",
   };
 }
 
@@ -112,11 +114,11 @@ export async function GET(req: NextRequest) {
         githubId: session.githubId,
         githubLogin: session.githubLogin,
       },
-      userRow.id
+      userRow.id,
     );
 
     const results = await Promise.allSettled(
-      accounts.map((account) => fetchPRMetrics(account.token))
+      accounts.map((account) => fetchPRMetrics(account.token)),
     );
 
     const merged = mergeMetrics(results, (a, b) => {

@@ -9,9 +9,7 @@ export default function Providers({ children }: { children: ReactNode }) {
   return (
     <SessionProvider>
       <AccountProvider>
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
       </AccountProvider>
     </SessionProvider>
   );

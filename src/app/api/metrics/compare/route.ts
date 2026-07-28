@@ -7,7 +7,9 @@ export const dynamic = "force-dynamic";
 const GITHUB_API = "https://api.github.com";
 
 function dateDiffDays(a: string, b: string): number {
-  return (new Date(b).getTime() - new Date(a).getTime()) / (1000 * 60 * 60 * 24);
+  return (
+    (new Date(b).getTime() - new Date(a).getTime()) / (1000 * 60 * 60 * 24)
+  );
 }
 
 function toDateStr(d: Date): string {
@@ -36,15 +38,19 @@ export async function GET(req: NextRequest) {
   });
 
   if (!userRes.ok) {
-    if (userRes.status === 404) return Response.json({ error: "User not found" }, { status: 404 });
-    return Response.json({ error: "GitHub API error or User is private" }, { status: 502 });
+    if (userRes.status === 404)
+      return Response.json({ error: "User not found" }, { status: 404 });
+    return Response.json(
+      { error: "GitHub API error or User is private" },
+      { status: 502 },
+    );
   }
 
   // 2. Commits & Streak (fetch 90 days)
   const since90 = new Date();
   since90.setDate(since90.getDate() - 90);
   const since90Str = since90.toISOString().slice(0, 10);
-  
+
   const since30 = new Date();
   since30.setDate(since30.getDate() - 30);
   const since30Str = since30.toISOString().slice(0, 10);
@@ -57,17 +63,17 @@ export async function GET(req: NextRequest) {
         Accept: "application/vnd.github+json",
       },
       next: { revalidate: 3600 },
-    }
+    },
   );
 
   let streak = 0;
   let commits30d = 0;
   let topLanguage = "Unknown";
-  
+
   if (commitsRes.ok) {
     const commitsData = await commitsRes.json();
     const items = commitsData.items || [];
-    
+
     const daySet: Record<string, true> = {};
     for (const item of items) {
       const dateStr = item.commit.author.date.slice(0, 10);
@@ -77,7 +83,7 @@ export async function GET(req: NextRequest) {
       }
     }
     const commitDays = Object.keys(daySet).sort();
-    
+
     if (commitDays.length > 0) {
       let currentRun = 1;
       let runs: { end: string; length: number }[] = [];
@@ -92,20 +98,24 @@ export async function GET(req: NextRequest) {
         }
       }
       runs.push({ end: commitDays[commitDays.length - 1], length: currentRun });
-      
+
       const today = toDateStr(new Date());
       const yesterday = toDateStr(new Date(Date.now() - 86400000));
       const lastRun = runs[runs.length - 1];
-      streak = (lastRun.end === today || lastRun.end === yesterday) ? lastRun.length : 0;
+      streak =
+        lastRun.end === today || lastRun.end === yesterday ? lastRun.length : 0;
     }
   }
 
   // 3. Top Language from repos
-  const reposRes = await fetch(`${GITHUB_API}/users/${username}/repos?per_page=100&sort=pushed`, {
-    headers: { Authorization: `Bearer ${session.accessToken}` },
-    next: { revalidate: 3600 },
-  });
-  
+  const reposRes = await fetch(
+    `${GITHUB_API}/users/${username}/repos?per_page=100&sort=pushed`,
+    {
+      headers: { Authorization: `Bearer ${session.accessToken}` },
+      next: { revalidate: 3600 },
+    },
+  );
+
   if (reposRes.ok) {
     const reposData = await reposRes.json();
     const langCounts: Record<string, number> = {};
@@ -124,7 +134,7 @@ export async function GET(req: NextRequest) {
     {
       headers: { Authorization: `Bearer ${session.accessToken}` },
       next: { revalidate: 3600 },
-    }
+    },
   );
   let prs = 0;
   if (prsRes.ok) {
@@ -137,6 +147,6 @@ export async function GET(req: NextRequest) {
     streak,
     commits30d,
     topLanguage,
-    prs
+    prs,
   });
 }

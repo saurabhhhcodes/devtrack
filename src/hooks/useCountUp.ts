@@ -26,7 +26,8 @@ export function useCountUp(target: number, duration?: number): number {
     hasAnimated.current = true;
 
     // Adaptive duration: smaller numbers animate slightly faster (500ms), larger numbers take up to 800ms
-    const actualDuration = duration ?? (target <= 10 ? 500 : target <= 50 ? 650 : 800);
+    const actualDuration =
+      duration ?? (target <= 10 ? 500 : target <= 50 ? 650 : 800);
 
     let startTime: number | null = null;
     let animationFrameId: number;

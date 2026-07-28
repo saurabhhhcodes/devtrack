@@ -31,7 +31,7 @@ export async function GET() {
   if (error) {
     return NextResponse.json(
       { error: "Failed to fetch accounts" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 

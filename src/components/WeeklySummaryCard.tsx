@@ -3,7 +3,11 @@
 import { useEffect, useState } from "react";
 
 interface WeeklySummaryData {
-  commits: { current: number | null; last: number | null; delta: number | null };
+  commits: {
+    current: number | null;
+    last: number | null;
+    delta: number | null;
+  };
   pullRequests: { opened: number | null; merged: number | null };
   activeDays: number | null;
   streak: number | null;
@@ -22,7 +26,9 @@ function DeltaBadge({ delta }: { delta: number | null }) {
   }
 
   if (delta > 0) {
-    return <span className="text-sm font-medium text-green-500">↑ {delta}</span>;
+    return (
+      <span className="text-sm font-medium text-green-500">↑ {delta}</span>
+    );
   }
 
   if (delta < 0) {
@@ -84,10 +90,7 @@ export default function WeeklySummaryCard() {
   const toggleCollapsed = () => {
     const nextValue = !isCollapsed;
     setIsCollapsed(nextValue);
-    window.localStorage.setItem(
-      "weekly-summary-collapsed",
-      String(nextValue)
-    );
+    window.localStorage.setItem("weekly-summary-collapsed", String(nextValue));
   };
 
   const showCollapsed = isHydrated && !isLoading && isCollapsed;
@@ -133,7 +136,9 @@ export default function WeeklySummaryCard() {
       ) : (
         <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
           <div className="rounded-lg bg-[var(--control)] p-4 text-center">
-            <div className="text-sm text-[var(--muted-foreground)]">Commits</div>
+            <div className="text-sm text-[var(--muted-foreground)]">
+              Commits
+            </div>
             <div className="mt-2 text-2xl font-bold text-[var(--accent)]">
               {data?.commits.current ?? "—"}
             </div>
@@ -142,19 +147,25 @@ export default function WeeklySummaryCard() {
             </div>
           </div>
           <div className="rounded-lg bg-[var(--control)] p-4 text-center">
-            <div className="text-sm text-[var(--muted-foreground)]">PRs Open</div>
+            <div className="text-sm text-[var(--muted-foreground)]">
+              PRs Open
+            </div>
             <div className="mt-2 text-2xl font-bold text-[var(--accent)]">
               {data?.pullRequests.opened ?? "—"}
             </div>
           </div>
           <div className="rounded-lg bg-[var(--control)] p-4 text-center">
-            <div className="text-sm text-[var(--muted-foreground)]">PRs Merged</div>
+            <div className="text-sm text-[var(--muted-foreground)]">
+              PRs Merged
+            </div>
             <div className="mt-2 text-2xl font-bold text-[var(--accent)]">
               {data?.pullRequests.merged ?? "—"}
             </div>
           </div>
           <div className="rounded-lg bg-[var(--control)] p-4 text-center">
-            <div className="text-sm text-[var(--muted-foreground)]">Active Days</div>
+            <div className="text-sm text-[var(--muted-foreground)]">
+              Active Days
+            </div>
             <div className="mt-2 text-2xl font-bold text-[var(--accent)]">
               {data?.activeDays !== null && data?.activeDays !== undefined
                 ? `${data.activeDays} / 7`
@@ -170,7 +181,9 @@ export default function WeeklySummaryCard() {
             </div>
           </div>
           <div className="rounded-lg bg-[var(--control)] p-4 text-center">
-            <div className="text-sm text-[var(--muted-foreground)]">Top Repo</div>
+            <div className="text-sm text-[var(--muted-foreground)]">
+              Top Repo
+            </div>
             <div className="mt-2 truncate text-2xl font-bold text-[var(--accent)]">
               {formatRepoName(data?.mostActiveRepo ?? null)}
             </div>

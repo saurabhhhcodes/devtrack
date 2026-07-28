@@ -1,14 +1,9 @@
-import {
-  createCipheriv,
-  createDecipheriv,
-  randomBytes,
-} from "crypto";
+import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
 
 const ALGORITHM = "aes-256-gcm";
 const IV_LENGTH = 12;
 const AUTH_TAG_LENGTH = 16;
-const KEY_ERROR_MESSAGE =
-  "ENCRYPTION_KEY env var must be a 32-byte hex string";
+const KEY_ERROR_MESSAGE = "ENCRYPTION_KEY env var must be a 32-byte hex string";
 
 function getEncryptionKey(): Buffer {
   const key = process.env.ENCRYPTION_KEY;
@@ -53,10 +48,10 @@ export function decryptToken(encrypted: string, iv: string): string {
 
   const ciphertext = encryptedBuffer.subarray(
     0,
-    encryptedBuffer.length - AUTH_TAG_LENGTH
+    encryptedBuffer.length - AUTH_TAG_LENGTH,
   );
   const authTag = encryptedBuffer.subarray(
-    encryptedBuffer.length - AUTH_TAG_LENGTH
+    encryptedBuffer.length - AUTH_TAG_LENGTH,
   );
 
   const decipher = createDecipheriv(ALGORITHM, key, ivBuffer);

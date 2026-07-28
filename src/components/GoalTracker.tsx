@@ -131,7 +131,9 @@ export default function GoalTracker() {
 
   return (
     <div className="h-full rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
-      <h2 className="mb-4 text-lg font-semibold text-[var(--card-foreground)]">Weekly Goals</h2>
+      <h2 className="mb-4 text-lg font-semibold text-[var(--card-foreground)]">
+        Weekly Goals
+      </h2>
 
       {goals.length === 0 ? (
         <p className="text-sm text-[var(--muted-foreground)]">
@@ -151,13 +153,17 @@ export default function GoalTracker() {
                 <div className="flex justify-between items-center text-sm mb-1">
                   <div className="flex flex-col gap-0.5">
                     <div className="flex items-center gap-2">
-                      <span className="text-[var(--card-foreground)]">{goal.title}</span>
+                      <span className="text-[var(--card-foreground)]">
+                        {goal.title}
+                      </span>
                       {goal.recurrence !== "none" && (
-                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${
-                          goal.recurrence === "weekly"
-                            ? "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/30"
-                            : "bg-[var(--card-muted)] text-[var(--muted-foreground)] border-[var(--border)]"
-                        }`}>
+                        <span
+                          className={`text-xs font-medium px-2 py-0.5 rounded-full border ${
+                            goal.recurrence === "weekly"
+                              ? "bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/30"
+                              : "bg-[var(--card-muted)] text-[var(--muted-foreground)] border-[var(--border)]"
+                          }`}
+                        >
                           {RECURRENCE_LABELS[goal.recurrence]}
                         </span>
                       )}
@@ -176,7 +182,9 @@ export default function GoalTracker() {
 
                     {isConfirming ? (
                       <span className="flex items-center gap-1 text-xs">
-                        <span className="text-[var(--muted-foreground)]">Delete?</span>
+                        <span className="text-[var(--muted-foreground)]">
+                          Delete?
+                        </span>
                         <button
                           onClick={() => handleDelete(goal.id)}
                           disabled={isDeleting}
@@ -185,7 +193,9 @@ export default function GoalTracker() {
                         >
                           Yes
                         </button>
-                        <span className="text-[var(--muted-foreground)]">/</span>
+                        <span className="text-[var(--muted-foreground)]">
+                          /
+                        </span>
                         <button
                           onClick={() => setConfirmingId(null)}
                           className="text-[var(--muted-foreground)] hover:text-[var(--card-foreground)] transition-colors"
@@ -202,8 +212,17 @@ export default function GoalTracker() {
                         aria-label={`Delete goal: ${goal.title}`}
                         title="Delete goal"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                          <path fillRule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clipRule="evenodd" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          className="w-4 h-4"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                       </button>
                     )}
@@ -224,14 +243,22 @@ export default function GoalTracker() {
 
       {lastUpdated && (
         <p className="text-xs text-[var(--muted-foreground)] mt-2 text-right">
-          {minutesAgo === 0 ? "Updated just now" : `Updated ${minutesAgo} min ago`}
+          {minutesAgo === 0
+            ? "Updated just now"
+            : `Updated ${minutesAgo} min ago`}
         </p>
       )}
 
       {/* Goal Creation Form */}
-      <form onSubmit={handleCreate} className="mt-6 space-y-3 border-t border-[var(--border)] pt-4">
+      <form
+        onSubmit={handleCreate}
+        className="mt-6 space-y-3 border-t border-[var(--border)] pt-4"
+      >
         <div>
-          <label htmlFor="goal-title" className="mb-1 block text-xs font-medium uppercase tracking-wide text-[var(--muted-foreground)]">
+          <label
+            htmlFor="goal-title"
+            className="mb-1 block text-xs font-medium uppercase tracking-wide text-[var(--muted-foreground)]"
+          >
             Goal title
           </label>
           <input
@@ -248,7 +275,10 @@ export default function GoalTracker() {
 
         <div className="flex gap-3">
           <div className="flex-1">
-            <label htmlFor="goal-target" className="mb-1 block text-xs font-medium uppercase tracking-wide text-[var(--muted-foreground)]">
+            <label
+              htmlFor="goal-target"
+              className="mb-1 block text-xs font-medium uppercase tracking-wide text-[var(--muted-foreground)]"
+            >
               Target
             </label>
             <input
@@ -262,7 +292,10 @@ export default function GoalTracker() {
             />
           </div>
           <div className="flex-1">
-            <label htmlFor="goal-unit" className="mb-1 block text-xs font-medium uppercase tracking-wide text-[var(--muted-foreground)]">
+            <label
+              htmlFor="goal-unit"
+              className="mb-1 block text-xs font-medium uppercase tracking-wide text-[var(--muted-foreground)]"
+            >
               Unit
             </label>
             <input
@@ -301,7 +334,9 @@ export default function GoalTracker() {
           </div>
           {recurrence !== "none" && (
             <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-              {recurrence === "weekly" ? "Resets every Monday." : "Resets on the 1st of each month."}
+              {recurrence === "weekly"
+                ? "Resets every Monday."
+                : "Resets on the 1st of each month."}
             </p>
           )}
         </div>
@@ -321,9 +356,7 @@ export default function GoalTracker() {
           )}
         </button>
 
-        {createError && (
-          <p className="text-sm text-red-500">{createError}</p>
-        )}
+        {createError && <p className="text-sm text-red-500">{createError}</p>}
       </form>
     </div>
   );

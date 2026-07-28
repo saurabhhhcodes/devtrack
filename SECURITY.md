@@ -2,17 +2,18 @@
 
 ## Supported Versions
 
-| Version | Supported |
-|---------|-----------|
-| `main` branch | ✅ |
+| Version       | Supported |
+| ------------- | --------- |
+| `main` branch | ✅        |
 
 ## Reporting a Vulnerability
 
 **Do not open a public GitHub issue for security vulnerabilities.**
 
-Email: **doshipriyanshu3@gmail.com** *(or open a [private security advisory](https://github.com/Priyanshu-byte-coder/devtrack/security/advisories/new))*
+Email: **doshipriyanshu3@gmail.com** _(or open a [private security advisory](https://github.com/Priyanshu-byte-coder/devtrack/security/advisories/new))_
 
 Include:
+
 - Description of the vulnerability
 - Steps to reproduce
 - Potential impact
@@ -23,12 +24,14 @@ Include:
 ## Scope
 
 In scope:
+
 - Authentication bypass or session vulnerabilities
 - SQL injection or data exposure via Supabase queries
 - GitHub OAuth token leakage
 - Server-side request forgery (SSRF) via GitHub API proxy
 
 Out of scope:
+
 - Issues requiring physical access to a device
 - Social engineering attacks
 - Rate limiting / denial of service on free-tier Vercel/Supabase

@@ -48,7 +48,7 @@ export const authOptions: NextAuthOptions = {
             github_login: p.login,
             updated_at: new Date().toISOString(),
           },
-          { onConflict: "github_id" }
+          { onConflict: "github_id" },
         );
       }
       return true;
@@ -65,8 +65,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (typeof token.accessToken === "string")
         session.accessToken = token.accessToken;
-      if (typeof token.githubId === "string")
-        session.githubId = token.githubId;
+      if (typeof token.githubId === "string") session.githubId = token.githubId;
       if (typeof token.githubLogin === "string")
         session.githubLogin = token.githubLogin;
       return session;

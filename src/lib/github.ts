@@ -12,15 +12,12 @@ export async function fetchUserEvents(token: string): Promise<GitHubEvent[]> {
 }
 
 export async function fetchUserRepos(token: string): Promise<GitHubRepo[]> {
-  const res = await fetch(
-    `${GITHUB_API}/user/repos?sort=pushed&per_page=10`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github+json",
-      },
-    }
-  );
+  const res = await fetch(`${GITHUB_API}/user/repos?sort=pushed&per_page=10`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+    },
+  });
   if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
   return res.json();
 }
@@ -56,7 +53,7 @@ export interface IssuesMetrics {
 }
 
 export async function fetchIssuesMetrics(
-  token: string
+  token: string,
 ): Promise<IssuesMetrics> {
   const headers = {
     Authorization: `Bearer ${token}`,
@@ -71,7 +68,7 @@ export async function fetchIssuesMetrics(
 
   const searchRes = await fetch(
     `https://api.github.com/search/issues?q=type:issue+author:@me+created:>=${since30d.toISOString().slice(0, 10)}&per_page=100`,
-    { headers, cache: "no-store" }
+    { headers, cache: "no-store" },
   );
   if (!searchRes.ok) throw new Error(`GitHub API error: ${searchRes.status}`);
 
@@ -87,24 +84,32 @@ export async function fetchIssuesMetrics(
     closedItems.length > 0
       ? Math.round(
           closedItems.reduce((sum, i) => {
-            return sum + (new Date(i.closed_at!).getTime() - new Date(i.created_at).getTime());
+            return (
+              sum +
+              (new Date(i.closed_at!).getTime() -
+                new Date(i.created_at).getTime())
+            );
           }, 0) /
             closedItems.length /
-            86400000
+            86400000,
         )
       : 0;
 
   const thisMonthRes = await fetch(
     `https://api.github.com/search/issues?q=type:issue+author:@me+created:>=${thisMonthStart.toISOString().slice(0, 10)}&per_page=1`,
-    { headers, cache: "no-store" }
+    { headers, cache: "no-store" },
   );
   const lastMonthRes = await fetch(
     `https://api.github.com/search/issues?q=type:issue+author:@me+created:${lastMonthStart.toISOString().slice(0, 10)}..${lastMonthEnd.toISOString().slice(0, 10)}&per_page=1`,
-    { headers, cache: "no-store" }
+    { headers, cache: "no-store" },
   );
 
-  const thisMonthCount = thisMonthRes.ok ? ((await thisMonthRes.json()) as { total_count: number }).total_count : 0;
-  const lastMonthCount = lastMonthRes.ok ? ((await lastMonthRes.json()) as { total_count: number }).total_count : 0;
+  const thisMonthCount = thisMonthRes.ok
+    ? ((await thisMonthRes.json()) as { total_count: number }).total_count
+    : 0;
+  const lastMonthCount = lastMonthRes.ok
+    ? ((await lastMonthRes.json()) as { total_count: number }).total_count
+    : 0;
 
   return {
     opened,

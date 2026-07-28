@@ -23,7 +23,7 @@ function toLocalDateStr(d: Date): string {
 
 function mergeContributionDays(
   a: Record<string, number>,
-  b: Record<string, number>
+  b: Record<string, number>,
 ): Record<string, number> {
   const result = { ...a };
   for (const [date, count] of Object.entries(b)) {
@@ -35,7 +35,7 @@ function mergeContributionDays(
 async function fetchContributionsForAccount(
   token: string,
   githubLogin: string,
-  days: number
+  days: number,
 ): Promise<ContributionResponse> {
   const since = new Date();
   since.setDate(since.getDate() - days);
@@ -49,7 +49,7 @@ async function fetchContributionsForAccount(
         Accept: "application/vnd.github+json",
       },
       cache: "no-store",
-    }
+    },
   );
 
   if (!searchRes.ok) {
@@ -84,7 +84,7 @@ export async function GET(req: NextRequest) {
       const result = await fetchContributionsForAccount(
         session.accessToken,
         session.githubLogin,
-        days
+        days,
       );
       return Response.json(result);
     } catch {
@@ -113,13 +113,13 @@ export async function GET(req: NextRequest) {
         githubId: session.githubId,
         githubLogin: session.githubLogin,
       },
-      userRow.id
+      userRow.id,
     );
 
     const results = await Promise.allSettled(
       accounts.map((account) =>
-        fetchContributionsForAccount(account.token, account.githubLogin, days)
-      )
+        fetchContributionsForAccount(account.token, account.githubLogin, days),
+      ),
     );
 
     const merged = mergeMetrics(results, (a, b) => ({
@@ -140,7 +140,7 @@ export async function GET(req: NextRequest) {
       const result = await fetchContributionsForAccount(
         session.accessToken,
         session.githubLogin,
-        days
+        days,
       );
       return Response.json(result);
     } catch {
@@ -169,7 +169,7 @@ export async function GET(req: NextRequest) {
     const result = await fetchContributionsForAccount(
       accountToken,
       accountRow.github_login,
-      days
+      days,
     );
     return Response.json(result);
   } catch {

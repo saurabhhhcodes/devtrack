@@ -9,7 +9,7 @@ export async function GET() {
   if (!session?.githubId) {
     return NextResponse.json(
       { error: "Must be signed in to link an account" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 

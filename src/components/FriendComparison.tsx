@@ -38,7 +38,9 @@ export default function FriendComparison() {
     setComparingUser(friendUsername.trim());
 
     try {
-      const res = await fetch(`/api/metrics/compare?username=${encodeURIComponent(friendUsername.trim())}`);
+      const res = await fetch(
+        `/api/metrics/compare?username=${encodeURIComponent(friendUsername.trim())}`,
+      );
       const data = await res.json();
 
       if (!res.ok) {
@@ -73,32 +75,34 @@ export default function FriendComparison() {
           </p>
         </div>
 
-      <form
-        onSubmit={handleCompare}
-        className="flex flex-col sm:flex-row gap-2 w-full"
-      >
-        <input
-          type="text"
-          placeholder="GitHub username..."
-          value={friendUsername}
-          onChange={(e) => setFriendUsername(e.target.value)}
-          className="min-w-0 flex-1 rounded-md border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm outline-none focus:border-[var(--accent)]"
-        />
-
-        <button
-          type="submit"
-          disabled={loading || !friendUsername.trim()}
-          className="w-full sm:w-auto shrink-0 whitespace-nowrap rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--accent-foreground)] transition-colors disabled:opacity-50"
+        <form
+          onSubmit={handleCompare}
+          className="flex flex-col sm:flex-row gap-2 w-full"
         >
-          {loading ? "Loading..." : "Compare"}
-        </button>
-      </form>
-    </div>
+          <input
+            type="text"
+            placeholder="GitHub username..."
+            value={friendUsername}
+            onChange={(e) => setFriendUsername(e.target.value)}
+            className="min-w-0 flex-1 rounded-md border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm outline-none focus:border-[var(--accent)]"
+          />
+
+          <button
+            type="submit"
+            disabled={loading || !friendUsername.trim()}
+            className="w-full sm:w-auto shrink-0 whitespace-nowrap rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--accent-foreground)] transition-colors disabled:opacity-50"
+          >
+            {loading ? "Loading..." : "Compare"}
+          </button>
+        </form>
+      </div>
 
       {error && (
         <div className="p-4 mb-4 rounded-md bg-red-500/10 border border-red-500/20 text-red-500 text-sm flex justify-between items-center">
           <span>{error}</span>
-          <button onClick={() => setError("")} className="hover:underline">Dismiss</button>
+          <button onClick={() => setError("")} className="hover:underline">
+            Dismiss
+          </button>
         </div>
       )}
 
@@ -106,32 +110,34 @@ export default function FriendComparison() {
         <div className="space-y-4">
           <div className="flex justify-between items-center text-sm font-medium text-[var(--muted-foreground)] px-2">
             <div className="w-1/3 text-left">You ({myData.username})</div>
-            <div className="w-1/3 text-center uppercase tracking-wider text-xs">Metric</div>
+            <div className="w-1/3 text-center uppercase tracking-wider text-xs">
+              Metric
+            </div>
             <div className="w-1/3 text-right">Them ({friendData.username})</div>
           </div>
 
           <div className="space-y-2">
-            <ComparisonRow 
-              label="Current Streak" 
-              myValue={myData.streak} 
-              theirValue={friendData.streak} 
-              suffix=" days" 
+            <ComparisonRow
+              label="Current Streak"
+              myValue={myData.streak}
+              theirValue={friendData.streak}
+              suffix=" days"
             />
-            <ComparisonRow 
-              label="Commits (30d)" 
-              myValue={myData.commits30d} 
-              theirValue={friendData.commits30d} 
+            <ComparisonRow
+              label="Commits (30d)"
+              myValue={myData.commits30d}
+              theirValue={friendData.commits30d}
             />
-            <ComparisonRow 
-              label="Pull Requests" 
-              myValue={myData.prs} 
-              theirValue={friendData.prs} 
+            <ComparisonRow
+              label="Pull Requests"
+              myValue={myData.prs}
+              theirValue={friendData.prs}
             />
-            <ComparisonRow 
-              label="Top Language" 
-              myValue={myData.topLanguage} 
-              theirValue={friendData.topLanguage} 
-              isString 
+            <ComparisonRow
+              label="Top Language"
+              myValue={myData.topLanguage}
+              theirValue={friendData.topLanguage}
+              isString
             />
           </div>
 
@@ -145,7 +151,7 @@ export default function FriendComparison() {
           </div>
         </div>
       )}
-      
+
       {!friendData && !loading && !error && (
         <div className="flex items-center justify-center h-32 border-2 border-dashed border-[var(--border)] rounded-lg text-[var(--muted-foreground)] text-sm">
           Enter a username above to start comparing
@@ -155,22 +161,22 @@ export default function FriendComparison() {
   );
 }
 
-function ComparisonRow({ 
-  label, 
-  myValue, 
-  theirValue, 
+function ComparisonRow({
+  label,
+  myValue,
+  theirValue,
   suffix = "",
-  isString = false
-}: { 
-  label: string; 
-  myValue: string | number; 
+  isString = false,
+}: {
+  label: string;
+  myValue: string | number;
   theirValue: string | number;
   suffix?: string;
   isString?: boolean;
 }) {
   let myWin = false;
   let theirWin = false;
-  
+
   if (!isString) {
     if (Number(myValue) > Number(theirValue)) myWin = true;
     if (Number(theirValue) > Number(myValue)) theirWin = true;
@@ -178,14 +184,20 @@ function ComparisonRow({
 
   return (
     <div className="flex items-center justify-between p-3 rounded-lg bg-[var(--control)]">
-      <div className={`w-1/3 text-left font-medium ${myWin ? "text-[var(--accent)]" : "text-[var(--foreground)]"}`}>
-        {myValue}{suffix}
+      <div
+        className={`w-1/3 text-left font-medium ${myWin ? "text-[var(--accent)]" : "text-[var(--foreground)]"}`}
+      >
+        {myValue}
+        {suffix}
       </div>
       <div className="w-1/3 text-center text-xs text-[var(--muted-foreground)] font-medium">
         {label}
       </div>
-      <div className={`w-1/3 text-right font-medium ${theirWin ? "text-[var(--accent)]" : "text-[var(--foreground)]"}`}>
-        {theirValue}{suffix}
+      <div
+        className={`w-1/3 text-right font-medium ${theirWin ? "text-[var(--accent)]" : "text-[var(--foreground)]"}`}
+      >
+        {theirValue}
+        {suffix}
       </div>
     </div>
   );

@@ -69,7 +69,7 @@ function escapeXml(str: string): string {
  */
 export function generateSimpleBadgeSVG(
   value: string,
-  color: string = "#6366f1"
+  color: string = "#6366f1",
 ): string {
   const valueWidth = (value.length + 1) * 8 + 20;
   const height = 20;

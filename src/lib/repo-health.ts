@@ -47,7 +47,7 @@ function gradeForScore(score: number): RepoHealthScore["grade"] {
 
 export function computeHealthScore(
   repo: string,
-  signals: RepoHealthSignals
+  signals: RepoHealthSignals,
 ): RepoHealthScore {
   const score =
     scoreCommitFrequency(signals.commitFrequency) +
@@ -65,4 +65,3 @@ export function computeHealthScore(
     grade: gradeForScore(rounded),
   };
 }
-
