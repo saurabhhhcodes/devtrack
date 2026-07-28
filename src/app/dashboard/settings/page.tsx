@@ -31,7 +31,7 @@ function formatAddedDate(addedAt: string): string {
 
 function getStatusMessage(
   success: string | null,
-  error: string | null
+  error: string | null,
 ): { kind: "success" | "error"; message: string } | null {
   if (success === "account_linked") {
     return {
@@ -109,16 +109,13 @@ function SettingsPageContent() {
   const [copied, setCopied] = useState(false);
   const [removeError, setRemoveError] = useState<string | null>(null);
   const [removingAccountId, setRemovingAccountId] = useState<string | null>(
-    null
+    null,
   );
 
   const statusMessage = useMemo(
     () =>
-      getStatusMessage(
-        searchParams.get("success"),
-        searchParams.get("error")
-      ),
-    [searchParams]
+      getStatusMessage(searchParams.get("success"), searchParams.get("error")),
+    [searchParams],
   );
 
   // Redirect to signin if not authenticated
@@ -226,7 +223,7 @@ function SettingsPageContent() {
       }
 
       setLinkedAccounts((current) =>
-        current.filter((account) => account.githubId !== githubId)
+        current.filter((account) => account.githubId !== githubId),
       );
     } catch {
       setRemoveError("Failed to remove account");

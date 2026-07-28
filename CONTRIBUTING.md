@@ -59,17 +59,17 @@ Stuck? Check [Common errors](./DEVELOPMENT.md#common-errors) in `DEVELOPMENT.md`
 
 Key files:
 
-| Path | Purpose |
-|------|---------|
-| `src/app/api/metrics/contributions/` | Commit activity from GitHub API |
-| `src/app/api/metrics/prs/` | PR analytics from GitHub API |
-| `src/app/api/metrics/streak/` | Commit streak calculation |
-| `src/app/api/metrics/repos/` | Top repositories by commits |
-| `src/app/api/goals/` | Weekly goals CRUD via Supabase |
-| `src/lib/auth.ts` | NextAuth config, GitHub OAuth, Supabase user upsert |
-| `src/lib/supabase.ts` | Supabase admin client (server-side only) |
-| `src/components/` | Dashboard UI components |
-| `supabase/schema.sql` | DB schema — run once in Supabase SQL Editor |
+| Path                                 | Purpose                                             |
+| ------------------------------------ | --------------------------------------------------- |
+| `src/app/api/metrics/contributions/` | Commit activity from GitHub API                     |
+| `src/app/api/metrics/prs/`           | PR analytics from GitHub API                        |
+| `src/app/api/metrics/streak/`        | Commit streak calculation                           |
+| `src/app/api/metrics/repos/`         | Top repositories by commits                         |
+| `src/app/api/goals/`                 | Weekly goals CRUD via Supabase                      |
+| `src/lib/auth.ts`                    | NextAuth config, GitHub OAuth, Supabase user upsert |
+| `src/lib/supabase.ts`                | Supabase admin client (server-side only)            |
+| `src/components/`                    | Dashboard UI components                             |
+| `supabase/schema.sql`                | DB schema — run once in Supabase SQL Editor         |
 
 See [DEVELOPMENT.md](./DEVELOPMENT.md) for architecture walkthrough and how to add new widgets.
 
@@ -124,15 +124,15 @@ PRs without a linked issue will not be reviewed.
 
 ## Issue Labels
 
-| Label | Meaning |
-|-------|---------|
-| `good-first-issue` | Beginner friendly, scoped, documented |
-| `medium` | Requires some context, moderate complexity |
-| `advanced` | Architectural, discuss in issue before coding |
-| `bug` | Something broken |
-| `enhancement` | New feature or improvement |
-| `docs` | Documentation only |
-| `~1h` `~2h` `~4h` `~8h` | Estimated effort |
+| Label                   | Meaning                                       |
+| ----------------------- | --------------------------------------------- |
+| `good-first-issue`      | Beginner friendly, scoped, documented         |
+| `medium`                | Requires some context, moderate complexity    |
+| `advanced`              | Architectural, discuss in issue before coding |
+| `bug`                   | Something broken                              |
+| `enhancement`           | New feature or improvement                    |
+| `docs`                  | Documentation only                            |
+| `~1h` `~2h` `~4h` `~8h` | Estimated effort                              |
 
 ---
 

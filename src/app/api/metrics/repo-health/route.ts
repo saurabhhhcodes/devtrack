@@ -2,7 +2,11 @@ import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { computeHealthScore } from "@/lib/repo-health";
-import type { RepoHealthResponse, RepoHealthSignals, RepoHealthScore } from "@/types/repo-health";
+import type {
+  RepoHealthResponse,
+  RepoHealthSignals,
+  RepoHealthScore,
+} from "@/types/repo-health";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +26,7 @@ interface RepoListResponse {
 async function fetchReposForAccount(
   token: string,
   githubLogin: string,
-  days: number
+  days: number,
 ): Promise<RepoListResponse> {
   const since = new Date();
   since.setDate(since.getDate() - days);
@@ -36,7 +40,7 @@ async function fetchReposForAccount(
         Accept: "application/vnd.github+json",
       },
       cache: "no-store",
-    }
+    },
   );
 
   if (!searchRes.ok) {
@@ -79,7 +83,11 @@ function daysSince(isoDate: string): number {
   return Math.max(0, Math.floor(diffMs / 86_400_000));
 }
 
-async function fetchJson<T>(url: string, token: string, accept?: string): Promise<T> {
+async function fetchJson<T>(
+  url: string,
+  token: string,
+  accept?: string,
+): Promise<T> {
   const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -95,7 +103,7 @@ async function fetchJson<T>(url: string, token: string, accept?: string): Promis
 
 async function fetchSignalsForRepo(
   token: string,
-  repoFullName: string
+  repoFullName: string,
 ): Promise<RepoHealthSignals> {
   const since30 = new Date();
   since30.setDate(since30.getDate() - 30);
@@ -107,9 +115,11 @@ async function fetchSignalsForRepo(
   }>(
     `${GITHUB_API}/search/commits?q=repo:${repoFullName}+committer-date:>${since30Str}&per_page=100&sort=committer-date&order=desc`,
     token,
-    "application/vnd.github+json"
+    "application/vnd.github+json",
   );
-  const commitFrequency = Array.isArray(commitSearch.items) ? commitSearch.items.length : 0;
+  const commitFrequency = Array.isArray(commitSearch.items)
+    ? commitSearch.items.length
+    : 0;
 
   // b) PR merge rate (opened vs merged in last 30 days)
   const openedPrs = await fetchJson<{
@@ -117,34 +127,39 @@ async function fetchSignalsForRepo(
     items: Array<{ created_at: string; closed_at: string | null }>;
   }>(
     `${GITHUB_API}/search/issues?q=repo:${repoFullName}+type:pr+created:>${since30Str}&per_page=100&sort=created&order=desc`,
-    token
+    token,
   );
 
   const mergedPrs = await fetchJson<{
     total_count: number;
   }>(
     `${GITHUB_API}/search/issues?q=repo:${repoFullName}+type:pr+is:merged+merged:>${since30Str}&per_page=100&sort=updated&order=desc`,
-    token
+    token,
   );
 
-  const openedCount = typeof openedPrs.total_count === "number" ? openedPrs.total_count : 0;
-  const mergedCount = typeof mergedPrs.total_count === "number" ? mergedPrs.total_count : 0;
+  const openedCount =
+    typeof openedPrs.total_count === "number" ? openedPrs.total_count : 0;
+  const mergedCount =
+    typeof mergedPrs.total_count === "number" ? mergedPrs.total_count : 0;
   const prMergeRate = openedCount > 0 ? mergedCount / openedCount : 0;
 
   // c) Avg PR open time (hours) for closed PRs in opened sample; default 0 if none
   const closedItems = (openedPrs.items ?? []).filter((i) => i.closed_at);
   const avgPrOpenTimeHours =
     closedItems.length > 0
-      ? closedItems.reduce((sum, pr) => sum + hoursBetween(pr.created_at, pr.closed_at!), 0) /
-        closedItems.length
+      ? closedItems.reduce(
+          (sum, pr) => sum + hoursBetween(pr.created_at, pr.closed_at!),
+          0,
+        ) / closedItems.length
       : 0;
 
   // d) open issues count
   const openIssues = await fetchJson<{ total_count: number }>(
     `${GITHUB_API}/search/issues?q=repo:${repoFullName}+type:issue+state:open&per_page=1`,
-    token
+    token,
   );
-  const openIssuesCount = typeof openIssues.total_count === "number" ? openIssues.total_count : 0;
+  const openIssuesCount =
+    typeof openIssues.total_count === "number" ? openIssues.total_count : 0;
 
   // e) days since last commit
   const commits = await fetchJson<
@@ -173,7 +188,9 @@ export async function GET(req: NextRequest) {
   // 1) Determine top repos (top 6 by commit count).
   let topRepos: RepoSummary[] = [];
   try {
-    topRepos = (await fetchReposForAccount(session.accessToken, session.githubLogin, 30)).repos;
+    topRepos = (
+      await fetchReposForAccount(session.accessToken, session.githubLogin, 30)
+    ).repos;
   } catch {
     return Response.json({ error: "GitHub API error" }, { status: 502 });
   }

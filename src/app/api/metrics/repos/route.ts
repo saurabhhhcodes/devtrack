@@ -23,7 +23,7 @@ interface RepoResponse {
 
 function mergeRepoCommits(
   a: Array<{ name: string; commits: number }>,
-  b: Array<{ name: string; commits: number }>
+  b: Array<{ name: string; commits: number }>,
 ): Array<{ name: string; commits: number }> {
   const map = new Map<string, number>();
   for (const repo of [...a, ...b]) {
@@ -37,7 +37,7 @@ function mergeRepoCommits(
 async function fetchReposForAccount(
   token: string,
   githubLogin: string,
-  days: number
+  days: number,
 ): Promise<RepoResponse> {
   const since = new Date();
   since.setDate(since.getDate() - days);
@@ -51,7 +51,7 @@ async function fetchReposForAccount(
         Accept: "application/vnd.github+json",
       },
       cache: "no-store",
-    }
+    },
   );
 
   if (!searchRes.ok) {
@@ -93,7 +93,7 @@ export async function GET(req: NextRequest) {
       const result = await fetchReposForAccount(
         session.accessToken,
         session.githubLogin,
-        days
+        days,
       );
       return Response.json(result);
     } catch {
@@ -122,13 +122,13 @@ export async function GET(req: NextRequest) {
         githubId: session.githubId,
         githubLogin: session.githubLogin,
       },
-      userRow.id
+      userRow.id,
     );
 
     const results = await Promise.allSettled(
       accounts.map((account) =>
-        fetchReposForAccount(account.token, account.githubLogin, days)
-      )
+        fetchReposForAccount(account.token, account.githubLogin, days),
+      ),
     );
 
     const merged = mergeMetrics(results, (a, b) => ({
@@ -148,7 +148,7 @@ export async function GET(req: NextRequest) {
       const result = await fetchReposForAccount(
         session.accessToken,
         session.githubLogin,
-        days
+        days,
       );
       return Response.json(result);
     } catch {
@@ -177,7 +177,7 @@ export async function GET(req: NextRequest) {
     const result = await fetchReposForAccount(
       accountToken,
       accountRow.github_login,
-      days
+      days,
     );
     return Response.json(result);
   } catch {

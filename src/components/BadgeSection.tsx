@@ -38,7 +38,8 @@ export default function BadgeSection({ username }: BadgeSectionProps) {
         📌 Get Your Badge
       </h2>
       <p className="mb-4 text-sm text-[var(--muted-foreground)]">
-        Show off your DevTrack stats on your GitHub profile! Copy and paste the markdown below into your README.
+        Show off your DevTrack stats on your GitHub profile! Copy and paste the
+        markdown below into your README.
       </p>
 
       <div className="space-y-4">
@@ -79,7 +80,9 @@ export default function BadgeSection({ username }: BadgeSectionProps) {
 
       <div className="mt-4 p-3 rounded-lg bg-[var(--accent)]/10 border border-[var(--accent)]/20">
         <p className="text-xs text-[var(--card-foreground)]">
-          <span className="font-semibold">💡 Tip:</span> Badges are cached for 1 hour and update automatically. Public data only (no authentication needed).
+          <span className="font-semibold">💡 Tip:</span> Badges are cached for 1
+          hour and update automatically. Public data only (no authentication
+          needed).
         </p>
       </div>
     </div>

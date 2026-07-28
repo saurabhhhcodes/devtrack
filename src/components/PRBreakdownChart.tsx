@@ -11,10 +11,10 @@ interface PRBreakdown {
 }
 
 const SLICES: { key: keyof PRBreakdown; label: string; color: string }[] = [
-  { key: "open",   label: "Open",   color: "#6366f1" },
+  { key: "open", label: "Open", color: "#6366f1" },
   { key: "merged", label: "Merged", color: "#34d399" },
   { key: "closed", label: "Closed", color: "#fb923c" },
-  { key: "draft",  label: "Draft",  color: "#94a3b8" },
+  { key: "draft", label: "Draft", color: "#94a3b8" },
 ];
 
 export default function PRBreakdownChart() {
@@ -30,7 +30,9 @@ export default function PRBreakdownChart() {
       .then((r) => r.json())
       .then((d: PRBreakdown) => setBreakdown(d))
       .catch(() =>
-        setError("We couldn't load your PR breakdown right now. Please try again in a moment.")
+        setError(
+          "We couldn't load your PR breakdown right now. Please try again in a moment.",
+        ),
       )
       .finally(() => setLoading(false));
   };
@@ -51,7 +53,9 @@ export default function PRBreakdownChart() {
   if (error) {
     return (
       <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-[var(--card-foreground)]">PR Breakdown</h2>
+        <h2 className="mb-4 text-lg font-semibold text-[var(--card-foreground)]">
+          PR Breakdown
+        </h2>
         <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">
           <p>{error}</p>
           <button
@@ -66,16 +70,22 @@ export default function PRBreakdownChart() {
     );
   }
 
-  const total = breakdown ? SLICES.reduce((sum, s) => sum + breakdown[s.key], 0) : 0;
+  const total = breakdown
+    ? SLICES.reduce((sum, s) => sum + breakdown[s.key], 0)
+    : 0;
   const chartData = breakdown
-    ? SLICES.map((s) => ({ name: s.label, value: breakdown[s.key], color: s.color })).filter(
-        (d) => d.value > 0
-      )
+    ? SLICES.map((s) => ({
+        name: s.label,
+        value: breakdown[s.key],
+        color: s.color,
+      })).filter((d) => d.value > 0)
     : [];
 
   return (
     <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
-      <h2 className="mb-4 text-lg font-semibold text-[var(--card-foreground)]">PR Breakdown</h2>
+      <h2 className="mb-4 text-lg font-semibold text-[var(--card-foreground)]">
+        PR Breakdown
+      </h2>
       {total === 0 ? (
         <p className="flex h-[200px] items-center justify-center text-sm text-[var(--muted-foreground)]">
           No pull requests found.
@@ -117,7 +127,10 @@ export default function PRBreakdownChart() {
                 key={s.key}
                 className="flex items-center gap-1.5 text-xs text-[var(--muted-foreground)]"
               >
-                <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: s.color }} />
+                <span
+                  className="h-2.5 w-2.5 rounded-full"
+                  style={{ backgroundColor: s.color }}
+                />
                 {s.label}: {breakdown?.[s.key] ?? 0}
               </div>
             ))}

@@ -14,7 +14,7 @@ interface StreakData {
 
 async function fetchGitHubWithToken(
   url: string,
-  token?: string
+  token?: string,
 ): Promise<Response> {
   const headers: Record<string, string> = {
     Accept: "application/vnd.github+json",
@@ -39,14 +39,14 @@ function toDateStr(d: Date): string {
 
 async function fetchStreak(
   username: string,
-  token?: string
+  token?: string,
 ): Promise<StreakData> {
   const since = new Date();
   since.setDate(since.getDate() - 90);
   const sinceStr = since.toISOString().slice(0, 10);
 
   const url = `${GITHUB_API}/search/commits?q=author:${username}+author-date:>=${sinceStr}&per_page=100&sort=author-date&order=desc`;
-  
+
   const searchRes = await fetchGitHubWithToken(url, token);
 
   if (!searchRes.ok) {
@@ -125,16 +125,13 @@ export async function GET(req: NextRequest) {
     if (!username) {
       return NextResponse.json(
         { error: "Missing 'user' query parameter" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Validate username is a string and not too long
     if (typeof username !== "string" || username.length > 50) {
-      return NextResponse.json(
-        { error: "Invalid username" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid username" }, { status: 400 });
     }
 
     console.log(`Fetching streak badge for user: ${username}`);
@@ -142,7 +139,9 @@ export async function GET(req: NextRequest) {
     // Use GITHUB_TOKEN env var if available for higher rate limits
     const githubToken = process.env.GITHUB_TOKEN;
     if (!githubToken) {
-      console.warn("⚠️ GITHUB_TOKEN not set - using unauthenticated API (60 req/hour limit)");
+      console.warn(
+        "⚠️ GITHUB_TOKEN not set - using unauthenticated API (60 req/hour limit)",
+      );
     }
 
     // Fetch streak data

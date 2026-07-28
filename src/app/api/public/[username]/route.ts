@@ -10,10 +10,7 @@ const GITHUB_API = "https://api.github.com";
  * Maps IP -> { count: number, resetAt: number }
  * This resets on server restart. For production, use Redis.
  */
-const ipRateLimits = new Map<
-  string,
-  { count: number; resetAt: number }
->();
+const ipRateLimits = new Map<string, { count: number; resetAt: number }>();
 
 const RATE_LIMIT_REQUESTS = 30;
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
@@ -49,7 +46,7 @@ function checkRateLimit(ip: string): { allowed: boolean; retryAfter?: number } {
 
 async function fetchGitHubWithToken(
   url: string,
-  token?: string
+  token?: string,
 ): Promise<Response> {
   const headers: Record<string, string> = {
     Accept: "application/vnd.github+json",
@@ -84,7 +81,7 @@ interface StreakData {
 async function fetchTopRepos(
   username: string,
   token?: string,
-  days: number = 30
+  days: number = 30,
 ): Promise<TopRepo[]> {
   const since = new Date();
   since.setDate(since.getDate() - days);
@@ -92,7 +89,7 @@ async function fetchTopRepos(
 
   const searchRes = await fetchGitHubWithToken(
     `${GITHUB_API}/search/commits?q=author:${username}+author-date:>=${sinceStr}&per_page=100&sort=author-date&order=desc`,
-    token
+    token,
   );
 
   if (!searchRes.ok) {
@@ -124,7 +121,7 @@ async function fetchTopRepos(
 async function fetchContributions(
   username: string,
   token?: string,
-  days: number = 30
+  days: number = 30,
 ): Promise<ContributionData> {
   const since = new Date();
   since.setDate(since.getDate() - days);
@@ -132,7 +129,7 @@ async function fetchContributions(
 
   const searchRes = await fetchGitHubWithToken(
     `${GITHUB_API}/search/commits?q=author:${username}+author-date:>=${sinceStr}&per_page=100&sort=author-date&order=desc`,
-    token
+    token,
   );
 
   if (!searchRes.ok) {
@@ -166,7 +163,7 @@ function toDateStr(d: Date): string {
 
 async function fetchStreak(
   username: string,
-  token?: string
+  token?: string,
 ): Promise<StreakData> {
   const since = new Date();
   since.setDate(since.getDate() - 90);
@@ -174,7 +171,7 @@ async function fetchStreak(
 
   const searchRes = await fetchGitHubWithToken(
     `${GITHUB_API}/search/commits?q=author:${username}+author-date:>=${sinceStr}&per_page=100&sort=author-date&order=desc`,
-    token
+    token,
   );
 
   if (!searchRes.ok) {
@@ -243,7 +240,7 @@ async function fetchStreak(
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { username: string } }
+  { params }: { params: { username: string } },
 ): Promise<NextResponse> {
   const { username } = params;
 
@@ -259,7 +256,7 @@ export async function GET(
         headers: {
           "Retry-After": String(rateLimit.retryAfter),
         },
-      }
+      },
     );
   }
 
@@ -269,7 +266,7 @@ export async function GET(
   if (!user) {
     return NextResponse.json(
       { error: "User not found or profile is not public" },
-      { status: 404 }
+      { status: 404 },
     );
   }
 

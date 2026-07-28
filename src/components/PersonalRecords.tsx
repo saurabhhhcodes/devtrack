@@ -22,7 +22,10 @@ interface Repo {
   url: string;
 }
 
-function getBestDay(data: Record<string, number>): { count: number; dateLabel: string | null } {
+function getBestDay(data: Record<string, number>): {
+  count: number;
+  dateLabel: string | null;
+} {
   let maxCount = 0;
   let bestDateStr: string | null = null;
 
@@ -52,7 +55,10 @@ function getBestDay(data: Record<string, number>): { count: number; dateLabel: s
   return { count: maxCount, dateLabel };
 }
 
-function getBestWeek(data: Record<string, number>): { count: number; weekLabel: string | null } {
+function getBestWeek(data: Record<string, number>): {
+  count: number;
+  weekLabel: string | null;
+} {
   const weeks: Record<string, number> = {};
 
   for (const [dateStr, count] of Object.entries(data)) {
@@ -61,7 +67,9 @@ function getBestWeek(data: Record<string, number>): { count: number; weekLabel: 
       const d = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
       const day = d.getUTCDay(); // 0 is Sunday, 1 is Monday
       const diff = d.getUTCDate() - day + (day === 0 ? -6 : 1); // Monday week start
-      const weekStart = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff));
+      const weekStart = new Date(
+        Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), diff),
+      );
       const weekStr = weekStart.toISOString().slice(0, 10);
       weeks[weekStr] = (weeks[weekStr] ?? 0) + count;
     }
@@ -96,7 +104,10 @@ function getBestWeek(data: Record<string, number>): { count: number; weekLabel: 
   return { count: maxCount, weekLabel };
 }
 
-function getBestMonth(data: Record<string, number>): { count: number; monthLabel: string | null } {
+function getBestMonth(data: Record<string, number>): {
+  count: number;
+  monthLabel: string | null;
+} {
   const months: Record<string, number> = {};
 
   for (const [dateStr, count] of Object.entries(data)) {
@@ -132,7 +143,10 @@ function getBestMonth(data: Record<string, number>): { count: number; monthLabel
   return { count: maxCount, monthLabel };
 }
 
-function getBusiestRepo(repos: Repo[]): { count: number; repoLabel: string | null } {
+function getBusiestRepo(repos: Repo[]): {
+  count: number;
+  repoLabel: string | null;
+} {
   if (!repos || repos.length === 0) {
     return { count: 0, repoLabel: null };
   }
@@ -149,7 +163,9 @@ function getBusiestRepo(repos: Repo[]): { count: number; repoLabel: string | nul
 export default function PersonalRecords() {
   const { selectedAccount } = useAccount();
   const [streak, setStreak] = useState<StreakData | null>(null);
-  const [contributions, setContributions] = useState<ContributionData | null>(null);
+  const [contributions, setContributions] = useState<ContributionData | null>(
+    null,
+  );
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -187,7 +203,9 @@ export default function PersonalRecords() {
       setContributions(contribData);
       setRepos(reposData.repos ?? []);
     } catch {
-      setError("We couldn't load your personal records right now. Please try again in a moment.");
+      setError(
+        "We couldn't load your personal records right now. Please try again in a moment.",
+      );
     } finally {
       setLoading(false);
     }

@@ -24,7 +24,8 @@ interface FreezeData {
 export default function StreakTracker() {
   const { selectedAccount } = useAccount();
   const [data, setData] = useState<StreakData | null>(null);
-  const [contributionData, setContributionData] = useState<ContributionData | null>(null);
+  const [contributionData, setContributionData] =
+    useState<ContributionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [minutesAgo, setMinutesAgo] = useState(0);
@@ -68,7 +69,9 @@ export default function StreakTracker() {
       setData(streakData);
       setContributionData(contribData);
     } catch {
-      setError("We couldn't load your streak data right now. Please try again in a moment.");
+      setError(
+        "We couldn't load your streak data right now. Please try again in a moment.",
+      );
     } finally {
       setLoading(false);
       setLastUpdated(new Date());
@@ -139,7 +142,10 @@ export default function StreakTracker() {
         <div className="h-6 w-36 bg-[var(--card-muted)] rounded animate-pulse mb-4" />
         <div className="grid grid-cols-2 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="bg-[var(--card-muted)] rounded-lg h-28 animate-pulse" />
+            <div
+              key={i}
+              className="bg-[var(--card-muted)] rounded-lg h-28 animate-pulse"
+            />
           ))}
         </div>
       </div>
@@ -149,7 +155,9 @@ export default function StreakTracker() {
   if (error) {
     return (
       <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-[var(--card-foreground)]">Commit Streaks</h2>
+        <h2 className="mb-4 text-lg font-semibold text-[var(--card-foreground)]">
+          Commit Streaks
+        </h2>
         <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">
           <p>{error}</p>
           <button
@@ -222,17 +230,20 @@ export default function StreakTracker() {
       "🔥 DevTrack Stats",
       `Current streak: ${data.current} days`,
       `Longest streak: ${data.longest} days`,
-      `Active days: ${data.totalActiveDays}`
-    ].join('\n');
+      `Active days: ${data.totalActiveDays}`,
+    ].join("\n");
 
     if (!navigator.clipboard) {
       return;
     }
 
-    navigator.clipboard.writeText(textToCopy).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }).catch(() => {});
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => {});
   };
 
   return (
@@ -249,7 +260,9 @@ export default function StreakTracker() {
             aria-label="Copy streak stats to clipboard"
           >
             {copied ? (
-              <span className="text-xs font-medium text-green-500">Copied!</span>
+              <span className="text-xs font-medium text-green-500">
+                Copied!
+              </span>
             ) : (
               <span className="text-base opacity-80 hover:opacity-100">📋</span>
             )}
@@ -266,7 +279,14 @@ export default function StreakTracker() {
                 : "bg-[var(--control)]"
             }`}
           >
-            <div className="text-xl mb-1" title={stat.tooltip} aria-label={stat.tooltip} role="img">{stat.icon}</div>
+            <div
+              className="text-xl mb-1"
+              title={stat.tooltip}
+              aria-label={stat.tooltip}
+              role="img"
+            >
+              {stat.icon}
+            </div>
             <div
               className={`text-2xl font-bold ${
                 stat.highlight ? "text-[var(--accent)]" : "text-[var(--accent)]"
@@ -279,14 +299,18 @@ export default function StreakTracker() {
                 </span>
               )}
             </div>
-            <div className="mt-1 text-xs text-[var(--muted-foreground)]">{stat.label}</div>
+            <div className="mt-1 text-xs text-[var(--muted-foreground)]">
+              {stat.label}
+            </div>
           </div>
         ))}
       </div>
       {badge && (
         <div className="mt-3 flex items-center justify-center gap-2 rounded-lg border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-3 py-2">
           <span>{badge.emoji}</span>
-          <span className="text-sm font-medium text-[var(--accent)]">{badge.label}</span>
+          <span className="text-sm font-medium text-[var(--accent)]">
+            {badge.label}
+          </span>
         </div>
       )}
 
@@ -294,7 +318,9 @@ export default function StreakTracker() {
         <div className="mt-4 pt-4 border-t border-[var(--border)]">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <div className="text-xs font-medium text-[var(--muted-foreground)]">Most Active Day</div>
+              <div className="text-xs font-medium text-[var(--muted-foreground)]">
+                Most Active Day
+              </div>
               <div className="text-sm font-semibold text-[var(--card-foreground)] mt-0.5">
                 {activeDayData.peakDay.label}{" "}
                 <span className="text-xs font-normal text-[var(--muted-foreground)]">
@@ -306,7 +332,10 @@ export default function StreakTracker() {
             <div className="flex items-end gap-1.5 h-10 pt-2">
               {activeDayData.insights.map((item) => {
                 const maxAvg = activeDayData.peakDay?.avgCommits ?? 1;
-                const heightPercent = maxAvg > 0 ? Math.max(15, Math.round((item.avgCommits / maxAvg) * 100)) : 15;
+                const heightPercent =
+                  maxAvg > 0
+                    ? Math.max(15, Math.round((item.avgCommits / maxAvg) * 100))
+                    : 15;
                 const isPeak = item.label === activeDayData.peakDay?.label;
 
                 return (
@@ -319,11 +348,15 @@ export default function StreakTracker() {
                       <div
                         style={{ height: `${heightPercent}%` }}
                         className={`w-full rounded-sm transition-all duration-300 ${
-                          isPeak ? "bg-[var(--accent)]" : "bg-[var(--accent)]/40 hover:bg-[var(--accent)]/60"
+                          isPeak
+                            ? "bg-[var(--accent)]"
+                            : "bg-[var(--accent)]/40 hover:bg-[var(--accent)]/60"
                         }`}
                       />
                     </div>
-                    <span className={`text-[10px] leading-none ${isPeak ? "font-bold text-[var(--card-foreground)]" : "text-[var(--muted-foreground)]"}`}>
+                    <span
+                      className={`text-[10px] leading-none ${isPeak ? "font-bold text-[var(--card-foreground)]" : "text-[var(--muted-foreground)]"}`}
+                    >
                       {item.shortLabel}
                     </span>
                   </div>
@@ -343,10 +376,14 @@ export default function StreakTracker() {
 
       {!freezeLoading && freeze?.hasFreeze && (
         <div className="mt-4 flex items-center justify-between rounded-lg border border-[var(--accent)]/30 bg-[var(--accent-soft)] px-4 py-3">
-          <span className="text-sm font-medium text-[var(--accent)]">✓ Freeze active today</span>
+          <span className="text-sm font-medium text-[var(--accent)]">
+            ✓ Freeze active today
+          </span>
           {confirmCancel ? (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-[var(--muted-foreground)]">Remove freeze?</span>
+              <span className="text-xs text-[var(--muted-foreground)]">
+                Remove freeze?
+              </span>
               <button
                 type="button"
                 onClick={handleCancelFreeze}
@@ -398,7 +435,11 @@ function toLocalDateStr(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-function StreakCalendar({ contributions, currentMonth, onMonthChange }: StreakCalendarProps) {
+function StreakCalendar({
+  contributions,
+  currentMonth,
+  onMonthChange,
+}: StreakCalendarProps) {
   const today = new Date();
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
@@ -408,10 +449,14 @@ function StreakCalendar({ contributions, currentMonth, onMonthChange }: StreakCa
   const daysInMonth = lastDay.getDate();
   const startingDayOfWeek = firstDay.getDay();
 
-  const monthName = firstDay.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  const monthName = firstDay.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
   const dayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  const calendarDays: Array<{ date: Date | null; dayOfMonth: number | null }> = [];
+  const calendarDays: Array<{ date: Date | null; dayOfMonth: number | null }> =
+    [];
 
   for (let i = 0; i < startingDayOfWeek; i++) {
     calendarDays.push({ date: null, dayOfMonth: null });
@@ -430,7 +475,9 @@ function StreakCalendar({ contributions, currentMonth, onMonthChange }: StreakCa
   return (
     <div className="mt-6 pt-6 border-t border-[var(--border)]">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-[var(--card-foreground)]">{monthName}</h3>
+        <h3 className="text-sm font-semibold text-[var(--card-foreground)]">
+          {monthName}
+        </h3>
         <div className="flex gap-2">
           <button
             onClick={handlePrevMonth}
@@ -451,7 +498,10 @@ function StreakCalendar({ contributions, currentMonth, onMonthChange }: StreakCa
 
       <div className="mb-2 grid grid-cols-7 gap-1">
         {dayLabels.map((label) => (
-          <div key={label} className="text-center text-xs font-medium text-[var(--muted-foreground)]">
+          <div
+            key={label}
+            className="text-center text-xs font-medium text-[var(--muted-foreground)]"
+          >
             {label}
           </div>
         ))}
@@ -539,7 +589,9 @@ interface WeekdayInsight {
   avgCommits: number;
 }
 
-function calculateActiveDayInsights(data: Record<string, number> | undefined | null): {
+function calculateActiveDayInsights(
+  data: Record<string, number> | undefined | null,
+): {
   insights: WeekdayInsight[];
   peakDay: WeekdayInsight | null;
   isValid: boolean;
@@ -548,7 +600,15 @@ function calculateActiveDayInsights(data: Record<string, number> | undefined | n
     return { insights: [], peakDay: null, isValid: false };
   }
 
-  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const dayNames = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
   const shortNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const totals = [0, 0, 0, 0, 0, 0, 0];
@@ -556,7 +616,12 @@ function calculateActiveDayInsights(data: Record<string, number> | undefined | n
 
   for (const [dateStr, commitCount] of Object.entries(data)) {
     const parts = dateStr.split("-").map(Number);
-    if (parts.length === 3 && !isNaN(parts[0]) && !isNaN(parts[1]) && !isNaN(parts[2])) {
+    if (
+      parts.length === 3 &&
+      !isNaN(parts[0]) &&
+      !isNaN(parts[1]) &&
+      !isNaN(parts[2])
+    ) {
       const d = new Date(parts[0], parts[1] - 1, parts[2]);
       if (!isNaN(d.getTime())) {
         const dayIdx = d.getDay();

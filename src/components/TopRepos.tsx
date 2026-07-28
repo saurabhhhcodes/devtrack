@@ -18,19 +18,26 @@ export default function TopRepos() {
   const [days, setDays] = useState(30);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [minutesAgo, setMinutesAgo] = useState(0);
-  const [healthScores, setHealthScores] = useState<Record<string, RepoHealthScore>>({});
+  const [healthScores, setHealthScores] = useState<
+    Record<string, RepoHealthScore>
+  >({});
   const [healthLoading, setHealthLoading] = useState(true);
 
   const fetchRepos = useCallback(() => {
     setLoading(true);
     setError(null);
-    const accountParam = selectedAccount !== null
-      ? `&accountId=${encodeURIComponent(selectedAccount)}`
-      : "";
+    const accountParam =
+      selectedAccount !== null
+        ? `&accountId=${encodeURIComponent(selectedAccount)}`
+        : "";
     fetch(`/api/metrics/repos?days=${days}${accountParam}`)
       .then((r) => r.json())
       .then((d: { repos: Repo[] }) => setRepos(d.repos ?? []))
-      .catch(() => setError("We couldn't load your top repositories right now. Please try again in a moment."))
+      .catch(() =>
+        setError(
+          "We couldn't load your top repositories right now. Please try again in a moment.",
+        ),
+      )
       .finally(() => {
         setLoading(false);
         setLastUpdated(new Date());
@@ -40,9 +47,10 @@ export default function TopRepos() {
 
   const fetchHealthScores = useCallback(() => {
     setHealthLoading(true);
-    const accountParam = selectedAccount !== null
-      ? `?accountId=${encodeURIComponent(selectedAccount)}`
-      : "";
+    const accountParam =
+      selectedAccount !== null
+        ? `?accountId=${encodeURIComponent(selectedAccount)}`
+        : "";
     fetch(`/api/metrics/repo-health${accountParam}`)
       .then((r) => r.json())
       .then((d: { repos: RepoHealthScore[] }) => {
@@ -65,7 +73,6 @@ export default function TopRepos() {
     return () => clearInterval(interval);
   }, [lastUpdated]);
 
-
   useEffect(() => {
     fetchRepos();
     fetchHealthScores();
@@ -76,7 +83,9 @@ export default function TopRepos() {
   return (
     <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-[var(--card-foreground)]">Top Repositories</h2>
+        <h2 className="text-lg font-semibold text-[var(--card-foreground)]">
+          Top Repositories
+        </h2>
         <select
           value={days}
           onChange={(e) => setDays(Number(e.target.value))}
@@ -91,7 +100,10 @@ export default function TopRepos() {
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-10 rounded bg-[var(--card-muted)] animate-pulse" />
+            <div
+              key={i}
+              className="h-10 rounded bg-[var(--card-muted)] animate-pulse"
+            />
           ))}
         </div>
       ) : error ? (
@@ -106,21 +118,23 @@ export default function TopRepos() {
           </button>
         </div>
       ) : repos.length === 0 ? (
-        <p className="text-sm text-[var(--muted-foreground)]">No commits in the last {days} days.</p>
+        <p className="text-sm text-[var(--muted-foreground)]">
+          No commits in the last {days} days.
+        </p>
       ) : (
         <ul className="space-y-3">
           {repos.map((repo, idx) => {
             const barWidth = Math.max(
               Math.round((repo.commits / maxCommits) * 100),
-              4
+              4,
             );
             const shortName = repo.name.split("/")[1] ?? repo.name;
             const health = healthScores[repo.name];
             const badgeTitle = health
               ? `Commits: ${health.signals.commitFrequency} | PR Merge Rate: ${Math.round(
-                  health.signals.prMergeRate * 100
+                  health.signals.prMergeRate * 100,
                 )}% | Avg PR Time: ${Math.round(
-                  health.signals.avgPrOpenTimeHours
+                  health.signals.avgPrOpenTimeHours,
                 )}h | Open Issues: ${health.signals.openIssuesCount} | Last Commit: ${health.signals.daysSinceLastCommit} days ago`
               : undefined;
             const badgeClass =
@@ -139,7 +153,9 @@ export default function TopRepos() {
                     className="max-w-[70%] truncate text-[var(--card-foreground)] transition-colors hover:text-[var(--accent)]"
                     title={repo.name}
                   >
-                    <span className="mr-1 text-[var(--muted-foreground)]">#{idx + 1}</span>
+                    <span className="mr-1 text-[var(--muted-foreground)]">
+                      #{idx + 1}
+                    </span>
                     {shortName}
                   </a>
                   <span className="shrink-0 flex items-center gap-2">
@@ -171,9 +187,11 @@ export default function TopRepos() {
       )}
       {lastUpdated && (
         <p className="text-xs text-[var(--muted-foreground)] mt-2 text-right">
-         {minutesAgo === 0 ? "Updated just now" : `Updated ${minutesAgo} min ago`}
+          {minutesAgo === 0
+            ? "Updated just now"
+            : `Updated ${minutesAgo} min ago`}
         </p>
-     )}
+      )}
     </div>
   );
 }

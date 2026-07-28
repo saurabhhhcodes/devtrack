@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   const session = await getServerSession(authOptions);
   if (!session?.githubId) {

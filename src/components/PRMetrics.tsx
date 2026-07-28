@@ -31,7 +31,11 @@ export default function PRMetrics() {
         return r.json();
       })
       .then((data: PRData) => setMetrics(data))
-      .catch(() => setError("We couldn't load your PR analytics right now. Please try again in a moment."))
+      .catch(() =>
+        setError(
+          "We couldn't load your PR analytics right now. Please try again in a moment.",
+        ),
+      )
       .finally(() => setLoading(false));
   }, [selectedAccount]);
 
@@ -50,7 +54,9 @@ export default function PRMetrics() {
 
   return (
     <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-sm">
-      <h2 className="mb-4 text-lg font-semibold text-[var(--card-foreground)]">PR Analytics</h2>
+      <h2 className="mb-4 text-lg font-semibold text-[var(--card-foreground)]">
+        PR Analytics
+      </h2>
       {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
@@ -81,7 +87,9 @@ export default function PRMetrics() {
               <div className="text-2xl font-bold text-[var(--accent)]">
                 {stat.value}
               </div>
-              <div className="mt-1 text-sm text-[var(--muted-foreground)]">{stat.label}</div>
+              <div className="mt-1 text-sm text-[var(--muted-foreground)]">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>

@@ -66,7 +66,7 @@ export async function GET() {
     };
 
     const nodes = (data.data?.viewer?.pinnedItems?.nodes ?? []).filter(
-      (node): node is PinnedRepo => node != null
+      (node): node is PinnedRepo => node != null,
     );
 
     return Response.json({ pinnedRepos: nodes });

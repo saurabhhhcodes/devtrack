@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { githubId: string } }
+  { params }: { params: { githubId: string } },
 ) {
   const session = await getServerSession(authOptions);
 
@@ -28,7 +28,7 @@ export async function DELETE(
   if (params.githubId === session.githubId) {
     return NextResponse.json(
       { error: "Cannot remove primary account" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 

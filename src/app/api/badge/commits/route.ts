@@ -7,7 +7,7 @@ const GITHUB_API = "https://api.github.com";
 
 async function fetchGitHubWithToken(
   url: string,
-  token?: string
+  token?: string,
 ): Promise<Response> {
   const headers: Record<string, string> = {
     Accept: "application/vnd.github+json",
@@ -22,7 +22,7 @@ async function fetchGitHubWithToken(
 
 async function fetchCommitsThisMonth(
   username: string,
-  token?: string
+  token?: string,
 ): Promise<number> {
   const since = new Date();
   since.setDate(1); // First day of current month
@@ -55,16 +55,13 @@ export async function GET(req: NextRequest) {
     if (!username) {
       return NextResponse.json(
         { error: "Missing 'user' query parameter" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Validate username is a string and not too long
     if (typeof username !== "string" || username.length > 50) {
-      return NextResponse.json(
-        { error: "Invalid username" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid username" }, { status: 400 });
     }
 
     console.log(`Fetching commits badge for user: ${username}`);
@@ -72,7 +69,9 @@ export async function GET(req: NextRequest) {
     // Use GITHUB_TOKEN env var if available for higher rate limits
     const githubToken = process.env.GITHUB_TOKEN;
     if (!githubToken) {
-      console.warn("⚠️ GITHUB_TOKEN not set - using unauthenticated API (60 req/hour limit)");
+      console.warn(
+        "⚠️ GITHUB_TOKEN not set - using unauthenticated API (60 req/hour limit)",
+      );
     }
 
     // Fetch commits data

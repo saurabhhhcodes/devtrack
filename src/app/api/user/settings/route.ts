@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     console.error("Error fetching user:", error);
     return NextResponse.json(
       { error: "Failed to fetch user settings" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -46,10 +46,7 @@ export async function PATCH(req: NextRequest) {
 
   if (fetchError || !user) {
     console.error("Error fetching user:", fetchError);
-    return NextResponse.json(
-      { error: "User not found" },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
   // Parse request body
@@ -59,7 +56,7 @@ export async function PATCH(req: NextRequest) {
   } catch {
     return NextResponse.json(
       { error: "Invalid request body" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -68,7 +65,7 @@ export async function PATCH(req: NextRequest) {
   if (typeof is_public !== "boolean") {
     return NextResponse.json(
       { error: "is_public must be a boolean" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -78,7 +75,7 @@ export async function PATCH(req: NextRequest) {
   if (!updated) {
     return NextResponse.json(
       { error: "Failed to update settings" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 

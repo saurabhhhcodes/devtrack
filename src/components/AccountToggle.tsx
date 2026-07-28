@@ -35,7 +35,7 @@ export default function AccountToggle() {
           (data.accounts ?? []).map((account) => ({
             githubId: account.githubId,
             githubLogin: account.githubLogin,
-          }))
+          })),
         );
       } catch {
         setLinkedAccounts([]);

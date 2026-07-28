@@ -40,7 +40,9 @@ export default function ExportButton() {
 
     const prData: PRData | null = prRes.ok ? await prRes.json() : null;
     const goalsData = goalsRes.ok ? await goalsRes.json() : { goals: [] };
-    const contribDataRaw = contribRes.ok ? await contribRes.json() : { data: {} };
+    const contribDataRaw = contribRes.ok
+      ? await contribRes.json()
+      : { data: {} };
 
     const contribData: DayData[] = Object.entries(contribDataRaw.data ?? {})
       .sort(([a], [b]) => a.localeCompare(b))
@@ -88,7 +90,8 @@ export default function ExportButton() {
         csv += "\nGoals\n";
         csv += "Label,Current,Target,Progress (%)\n";
         goalsData.forEach((g) => {
-          const pct = g.target > 0 ? ((g.current / g.target) * 100).toFixed(1) : "0";
+          const pct =
+            g.target > 0 ? ((g.current / g.target) * 100).toFixed(1) : "0";
           csv += `"${g.label}",${g.current},${g.target},${pct}%\n`;
         });
       }
@@ -124,12 +127,14 @@ export default function ExportButton() {
         autoTable(doc, {
           startY: currentY + 5,
           head: [["Open PRs", "Merged", "Avg Review Time", "Merge Rate"]],
-          body: [[
-            prData.open,
-            prData.merged,
-            `${prData.avgReviewHours}h`,
-            prData.mergeRate,
-          ]],
+          body: [
+            [
+              prData.open,
+              prData.merged,
+              `${prData.avgReviewHours}h`,
+              prData.mergeRate,
+            ],
+          ],
           styles: { fontSize: 10 },
           headStyles: { fillColor: [59, 130, 246] },
         });
@@ -146,7 +151,8 @@ export default function ExportButton() {
           startY: currentY + 5,
           head: [["Goal Label", "Current", "Target", "Progress"]],
           body: goalsData.map((g) => {
-            const pct = g.target > 0 ? ((g.current / g.target) * 100).toFixed(1) : "0";
+            const pct =
+              g.target > 0 ? ((g.current / g.target) * 100).toFixed(1) : "0";
             return [g.label, g.current, g.target, `${pct}%`];
           }),
           styles: { fontSize: 10 },
@@ -183,8 +189,18 @@ export default function ExportButton() {
         disabled={isExportingCSV}
         className="px-4 py-2 bg-[var(--control)] border border-[var(--border)] text-[var(--card-foreground)] hover:border-[var(--accent)] rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50"
       >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+          />
         </svg>
         {isExportingCSV ? "Exporting..." : "Export CSV"}
       </button>
@@ -195,8 +211,18 @@ export default function ExportButton() {
         disabled={isExportingPDF}
         className="px-4 py-2 bg-[var(--accent)] text-[var(--accent-foreground)] hover:opacity-90 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50"
       >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
         </svg>
         {isExportingPDF ? "Exporting..." : "Export PDF"}
       </button>

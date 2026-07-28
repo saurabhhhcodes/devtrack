@@ -16,17 +16,50 @@ const allDeps = new Set([
 
 // Node built-ins (not in package.json but valid to import)
 const BUILTINS = new Set([
-  "assert", "buffer", "child_process", "cluster", "crypto", "dgram",
-  "dns", "domain", "events", "fs", "http", "http2", "https", "module",
-  "net", "os", "path", "perf_hooks", "process", "punycode", "querystring",
-  "readline", "repl", "stream", "string_decoder", "timers", "tls", "tty",
-  "url", "util", "v8", "vm", "wasi", "worker_threads", "zlib",
+  "assert",
+  "buffer",
+  "child_process",
+  "cluster",
+  "crypto",
+  "dgram",
+  "dns",
+  "domain",
+  "events",
+  "fs",
+  "http",
+  "http2",
+  "https",
+  "module",
+  "net",
+  "os",
+  "path",
+  "perf_hooks",
+  "process",
+  "punycode",
+  "querystring",
+  "readline",
+  "repl",
+  "stream",
+  "string_decoder",
+  "timers",
+  "tls",
+  "tty",
+  "url",
+  "util",
+  "v8",
+  "vm",
+  "wasi",
+  "worker_threads",
+  "zlib",
 ]);
 
 // Next.js / framework aliases that resolve internally
 const FRAMEWORK_ALIASES = new Set([
-  "next", "react", "react-dom",
-  "server-only", "client-only",
+  "next",
+  "react",
+  "react-dom",
+  "server-only",
+  "client-only",
 ]);
 
 function collectFiles(dir) {
@@ -34,7 +67,8 @@ function collectFiles(dir) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (["node_modules", ".next", "dist", ".git"].includes(entry.name)) continue;
+      if (["node_modules", ".next", "dist", ".git"].includes(entry.name))
+        continue;
       out.push(...collectFiles(full));
     } else if (/\.(ts|tsx)$/.test(entry.name)) {
       out.push(full);
@@ -68,7 +102,8 @@ for (const file of files) {
     while ((m = re.exec(src)) !== null) {
       const mod = m[1];
       // Skip relative imports, path aliases (@/ is the src alias — not a pkg)
-      if (mod.startsWith(".") || mod.startsWith("/") || mod.startsWith("@/")) continue;
+      if (mod.startsWith(".") || mod.startsWith("/") || mod.startsWith("@/"))
+        continue;
 
       const pkgName = extractPackageName(mod);
       if (BUILTINS.has(pkgName) || FRAMEWORK_ALIASES.has(pkgName)) continue;
@@ -81,12 +116,16 @@ for (const file of files) {
 }
 
 if (missing.size > 0) {
-  console.error("\n❌  Imports found with no matching entry in package.json:\n");
+  console.error(
+    "\n❌  Imports found with no matching entry in package.json:\n",
+  );
   for (const [pkg, usedIn] of missing) {
     console.error(`  ${pkg}`);
     for (const f of usedIn) console.error(`    └─ ${f}`);
   }
-  console.error("\nFix: npm install <package-name>  then commit package.json + package-lock.json\n");
+  console.error(
+    "\nFix: npm install <package-name>  then commit package.json + package-lock.json\n",
+  );
   process.exit(1);
 }
 

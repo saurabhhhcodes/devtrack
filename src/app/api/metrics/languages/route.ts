@@ -27,7 +27,7 @@ export async function GET() {
 
   const searchRes = await fetch(
     `${GITHUB_API}/search/commits?q=author:${session.githubLogin}+author-date:>=${sinceStr}&per_page=100&sort=author-date&order=desc`,
-    { headers, cache: "no-store" }
+    { headers, cache: "no-store" },
   );
 
   if (!searchRes.ok) {
@@ -37,7 +37,9 @@ export async function GET() {
   const data = (await searchRes.json()) as { items: RepoItem[] };
 
   // Deduplicate repo names
-  const repoNames = Array.from(new Set(data.items.map((i) => i.repository.full_name)));
+  const repoNames = Array.from(
+    new Set(data.items.map((i) => i.repository.full_name)),
+  );
 
   // Fetch language breakdown for each repo
   const langTotals: Record<string, number> = {};
@@ -57,7 +59,7 @@ export async function GET() {
       } catch {
         // Skip repos that fail
       }
-    })
+    }),
   );
 
   const totalBytes = Object.values(langTotals).reduce((s, b) => s + b, 0);
@@ -66,7 +68,8 @@ export async function GET() {
     .map(([name, bytes]) => ({
       name,
       bytes,
-      percentage: totalBytes > 0 ? Math.round((bytes / totalBytes) * 1000) / 10 : 0,
+      percentage:
+        totalBytes > 0 ? Math.round((bytes / totalBytes) * 1000) / 10 : 0,
     }))
     .sort((a, b) => b.percentage - a.percentage)
     .slice(0, 6);

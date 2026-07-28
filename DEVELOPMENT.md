@@ -6,13 +6,14 @@ Everything you need to run DevTrack locally from scratch in under 10 minutes.
 
 ## Prerequisites
 
-| Tool | Version | Check |
-|------|---------|-------|
-| Node.js | >= 18 | `node -v` |
-| npm | >= 9 | `npm -v` |
-| Git | any | `git --version` |
+| Tool    | Version | Check           |
+| ------- | ------- | --------------- |
+| Node.js | >= 18   | `node -v`       |
+| npm     | >= 9    | `npm -v`        |
+| Git     | any     | `git --version` |
 
 You also need free accounts on:
+
 - [Supabase](https://supabase.com) — for the database
 - GitHub — for OAuth (you already have this)
 
@@ -81,6 +82,7 @@ GITHUB_SECRET=your_github_client_secret
 ```
 
 Generate `NEXTAUTH_SECRET`:
+
 ```bash
 # macOS / Linux
 openssl rand -base64 32
@@ -145,14 +147,15 @@ All GitHub API calls use the signed-in user's OAuth token — stored in the sess
 
 ## Available scripts
 
-| Command | What it does |
-|---------|-------------|
-| `npm run dev` | Start dev server at localhost:3000 |
-| `npm run build` | Production build |
-| `npm run lint` | ESLint |
+| Command              | What it does                        |
+| -------------------- | ----------------------------------- |
+| `npm run dev`        | Start dev server at localhost:3000  |
+| `npm run build`      | Production build                    |
+| `npm run lint`       | ESLint                              |
 | `npm run type-check` | TypeScript compiler check (no emit) |
 
 Run lint and type-check before pushing:
+
 ```bash
 npm run lint && npm run type-check
 ```
@@ -166,6 +169,7 @@ npm run lint && npm run type-check
 3. Import and place in `src/app/dashboard/page.tsx`
 
 Pattern for an API route:
+
 ```ts
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -187,34 +191,42 @@ export async function GET() {
 ## Common errors
 
 ### `NEXTAUTH_SECRET` missing
+
 ```
 [next-auth][error][NO_SECRET]
 ```
+
 Add `NEXTAUTH_SECRET` to `.env.local`.
 
 ---
 
 ### GitHub OAuth callback mismatch
+
 ```
 The redirect_uri is not associated with this application
 ```
+
 Ensure the **Authorization callback URL** in your GitHub OAuth App is exactly:
 `http://localhost:3000/api/auth/callback/github`
 
 ---
 
 ### Supabase "relation does not exist"
+
 ```
 relation "users" does not exist
 ```
+
 You forgot to run `supabase/schema.sql`. Go to Supabase SQL Editor and run it.
 
 ---
 
 ### GitHub API rate limit
+
 ```
 { "message": "API rate limit exceeded" }
 ```
+
 You hit the 30 requests/minute search API limit. Wait 1 minute. In production this won't happen for normal usage.
 
 ---

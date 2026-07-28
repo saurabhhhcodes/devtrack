@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
   if (!stateCookie || !state || stateCookie !== state) {
     return NextResponse.redirect(
       buildSettingsRedirect("error", "invalid_state"),
-      { status: 302 }
+      { status: 302 },
     );
   }
 
@@ -40,25 +40,28 @@ export async function GET(req: NextRequest) {
   if (!session?.githubId) {
     return NextResponse.redirect(
       buildSettingsRedirect("error", "unauthorized"),
-      { status: 302 }
+      { status: 302 },
     );
   }
 
   const redirectUri = `${process.env.NEXTAUTH_URL ?? ""}/api/auth/link-github/callback`;
 
-  const tokenResponse = await fetch("https://github.com/login/oauth/access_token", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
+  const tokenResponse = await fetch(
+    "https://github.com/login/oauth/access_token",
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+      body: new URLSearchParams({
+        client_id: process.env.GITHUB_ID ?? "",
+        client_secret: process.env.GITHUB_SECRET ?? "",
+        code: code ?? "",
+        redirect_uri: redirectUri,
+      }),
+      cache: "no-store",
     },
-    body: new URLSearchParams({
-      client_id: process.env.GITHUB_ID ?? "",
-      client_secret: process.env.GITHUB_SECRET ?? "",
-      code: code ?? "",
-      redirect_uri: redirectUri,
-    }),
-    cache: "no-store",
-  });
+  );
 
   const tokenData = (await tokenResponse.json()) as GitHubTokenResponse;
   const accessToken = tokenData.access_token;
@@ -66,7 +69,7 @@ export async function GET(req: NextRequest) {
   if (!accessToken) {
     return NextResponse.redirect(
       buildSettingsRedirect("error", "token_exchange_failed"),
-      { status: 302 }
+      { status: 302 },
     );
   }
 
@@ -81,7 +84,7 @@ export async function GET(req: NextRequest) {
   if (!profileResponse.ok) {
     return NextResponse.redirect(
       buildSettingsRedirect("error", "github_profile_failed"),
-      { status: 302 }
+      { status: 302 },
     );
   }
 
@@ -90,7 +93,7 @@ export async function GET(req: NextRequest) {
   if (String(profile.id) === session.githubId) {
     return NextResponse.redirect(
       buildSettingsRedirect("error", "cannot_link_primary_account"),
-      { status: 302 }
+      { status: 302 },
     );
   }
 
@@ -103,7 +106,7 @@ export async function GET(req: NextRequest) {
   if (userError || !user) {
     return NextResponse.redirect(
       buildSettingsRedirect("error", "user_not_found"),
-      { status: 302 }
+      { status: 302 },
     );
   }
 
@@ -122,20 +125,20 @@ export async function GET(req: NextRequest) {
   if (insertError?.code === "23505") {
     return NextResponse.redirect(
       buildSettingsRedirect("error", "already_linked"),
-      { status: 302 }
+      { status: 302 },
     );
   }
 
   if (insertError) {
     return NextResponse.redirect(
       buildSettingsRedirect("error", "insert_failed"),
-      { status: 302 }
+      { status: 302 },
     );
   }
 
   const response = NextResponse.redirect(
     buildSettingsRedirect("success", "account_linked"),
-    { status: 302 }
+    { status: 302 },
   );
   response.cookies.set("link_github_state", "", {
     httpOnly: true,

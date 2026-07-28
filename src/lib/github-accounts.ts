@@ -35,7 +35,7 @@ export async function getLinkedTokens(userId: string): Promise<string[]> {
   const rows = (data ?? []) as UserGitHubAccountRow[];
 
   return rows.map((row) =>
-    decryptToken(row.access_token_encrypted, row.access_token_iv)
+    decryptToken(row.access_token_encrypted, row.access_token_iv),
   );
 }
 
@@ -68,7 +68,7 @@ export async function pickBestToken(tokens: string[]): Promise<string> {
   }
 
   const remainingValues = await Promise.all(
-    tokens.map((token) => getRateLimitRemaining(token))
+    tokens.map((token) => getRateLimitRemaining(token)),
   );
 
   let bestIndex = 0;
@@ -84,24 +84,22 @@ export async function pickBestToken(tokens: string[]): Promise<string> {
 
 export async function getAllTokens(
   primaryToken: string,
-  userId: string
+  userId: string,
 ): Promise<string[]> {
   const linkedTokens = await getLinkedTokens(userId);
   const dedupedLinkedTokens = linkedTokens.filter(
-    (token) => token !== primaryToken
+    (token) => token !== primaryToken,
   );
 
   return [primaryToken, ...dedupedLinkedTokens];
 }
 
 export async function getLinkedAccounts(
-  userId: string
+  userId: string,
 ): Promise<LinkedAccount[]> {
   const { data, error } = await supabaseAdmin
     .from("user_github_accounts")
-    .select(
-      "github_id, github_login, access_token_encrypted, access_token_iv"
-    )
+    .select("github_id, github_login, access_token_encrypted, access_token_iv")
     .eq("user_id", userId);
 
   if (error) {
@@ -119,11 +117,11 @@ export async function getLinkedAccounts(
 
 export async function getAllAccounts(
   primary: { token: string; githubId: string; githubLogin: string },
-  userId: string
+  userId: string,
 ): Promise<LinkedAccount[]> {
   const linkedAccounts = await getLinkedAccounts(userId);
   const filteredLinkedAccounts = linkedAccounts.filter(
-    (account) => account.githubId !== primary.githubId
+    (account) => account.githubId !== primary.githubId,
   );
 
   return [
@@ -138,7 +136,7 @@ export async function getAllAccounts(
 
 export async function getAccountToken(
   userId: string,
-  accountGithubId: string
+  accountGithubId: string,
 ): Promise<string | null> {
   const { data, error } = await supabaseAdmin
     .from("user_github_accounts")
@@ -158,11 +156,11 @@ export async function getAccountToken(
 
 export function mergeMetrics<T>(
   results: PromiseSettledResult<T>[],
-  merge: (a: T, b: T) => T
+  merge: (a: T, b: T) => T,
 ): T | null {
   const fulfilled = results.filter(
     (result): result is PromiseFulfilledResult<T> =>
-      result.status === "fulfilled"
+      result.status === "fulfilled",
   );
 
   if (fulfilled.length === 0) {

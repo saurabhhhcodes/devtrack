@@ -40,9 +40,12 @@ export default function LanguageBreakdown() {
       .finally(() => setLoading(false));
   }, []);
 
-  const totalPercentage = languages.reduce((sum, lang) => sum + lang.percentage, 0);
+  const totalPercentage = languages.reduce(
+    (sum, lang) => sum + lang.percentage,
+    0,
+  );
   const roundedTotal = Math.round(totalPercentage * 10) / 10;
-  
+
   const displayLanguages = [...languages];
   if (roundedTotal < 100 && languages.length > 0) {
     displayLanguages.push({
@@ -63,7 +66,10 @@ export default function LanguageBreakdown() {
           <div className="h-6 rounded-full bg-[var(--card-muted)] animate-pulse" />
           <div className="grid grid-cols-2 gap-2 mt-3">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-5 rounded bg-[var(--card-muted)] animate-pulse" />
+              <div
+                key={i}
+                className="h-5 rounded bg-[var(--card-muted)] animate-pulse"
+              />
             ))}
           </div>
         </div>
@@ -81,7 +87,10 @@ export default function LanguageBreakdown() {
                 className="h-full transition-all duration-500 first:rounded-l-full last:rounded-r-full"
                 style={{
                   width: `${lang.percentage}%`,
-                  backgroundColor: lang.name === "Other" ? "var(--control)" : getColor(lang.name),
+                  backgroundColor:
+                    lang.name === "Other"
+                      ? "var(--control)"
+                      : getColor(lang.name),
                   minWidth: lang.percentage > 0 ? "4px" : "0px",
                 }}
                 title={`${lang.name}: ${lang.percentage}%`}
@@ -95,7 +104,12 @@ export default function LanguageBreakdown() {
               <div key={lang.name} className="flex items-center gap-2 text-sm">
                 <span
                   className="inline-block h-3 w-3 shrink-0 rounded-full"
-                  style={{ backgroundColor: lang.name === "Other" ? "var(--control)" : getColor(lang.name) }}
+                  style={{
+                    backgroundColor:
+                      lang.name === "Other"
+                        ? "var(--control)"
+                        : getColor(lang.name),
+                  }}
                 />
                 <span className="truncate text-[var(--card-foreground)]">
                   {lang.name}

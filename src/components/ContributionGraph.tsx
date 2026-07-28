@@ -89,7 +89,6 @@ export default function ContributionGraph() {
         </h2>
 
         <div className="flex flex-wrap items-center gap-2">
-
           <div className="flex gap-1 rounded-lg bg-[var(--control)] p-1">
             {RANGES.map((r) => (
               <button
@@ -97,10 +96,11 @@ export default function ContributionGraph() {
                 onClick={() => setDays(r.days)}
                 aria-label={`Show ${r.days}-day range`}
                 aria-pressed={days === r.days}
-                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${days === r.days
-                  ? "bg-[var(--accent)] text-[var(--accent-foreground)]"
-                  : "text-[var(--muted-foreground)] hover:text-[var(--card-foreground)]"
-                  }`}
+                className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                  days === r.days
+                    ? "bg-[var(--accent)] text-[var(--accent-foreground)]"
+                    : "text-[var(--muted-foreground)] hover:text-[var(--card-foreground)]"
+                }`}
               >
                 {r.label}
               </button>
@@ -120,10 +120,11 @@ export default function ContributionGraph() {
                   type="button"
                   onClick={() => setChartType(chart.key)}
                   aria-pressed={chartType === chart.key}
-                  className={`px-3 py-1 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${chartType === chart.key
+                  className={`px-3 py-1 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    chartType === chart.key
                       ? "bg-[var(--accent)] text-[var(--accent-foreground)]"
                       : "text-[var(--muted-foreground)] hover:text-[var(--card-foreground)]"
-                    }`}
+                  }`}
                 >
                   {chart.label}
                 </button>
@@ -137,9 +138,7 @@ export default function ContributionGraph() {
         <div className="h-[200px] rounded bg-[var(--card-muted)] animate-pulse" />
       ) : error ? (
         <div className="flex h-[200px] items-center rounded-lg border border-red-500/30 bg-red-500/10 px-4">
-          <p className="text-sm text-red-400">
-            {error} Please try refreshing.
-          </p>
+          <p className="text-sm text-red-400">{error} Please try refreshing.</p>
         </div>
       ) : data.length === 0 ? (
         <p className="flex h-[200px] items-center text-sm text-[var(--muted-foreground)]">

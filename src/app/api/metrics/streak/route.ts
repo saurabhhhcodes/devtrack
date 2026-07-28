@@ -19,7 +19,7 @@ function toDateStr(d: Date): string {
 
 async function fetchActiveDates(
   githubLogin: string,
-  token: string
+  token: string,
 ): Promise<Set<string>> {
   const since = new Date();
   since.setDate(since.getDate() - 90);
@@ -33,7 +33,7 @@ async function fetchActiveDates(
         Accept: "application/vnd.github+json",
       },
       cache: "no-store",
-    }
+    },
   );
 
   if (!searchRes.ok) {
@@ -54,7 +54,7 @@ async function fetchActiveDates(
 
 function calculateStreakFromDates(
   activeDates: Set<string>,
-  freezeDates: Set<string>
+  freezeDates: Set<string>,
 ): {
   current: number;
   longest: number;
@@ -89,7 +89,11 @@ function calculateStreakFromDates(
         longestStreak = currentRun;
       }
     } else {
-      runs.push({ start: runStart, end: commitDays[i - 1], length: currentRun });
+      runs.push({
+        start: runStart,
+        end: commitDays[i - 1],
+        length: currentRun,
+      });
       runStart = commitDays[i];
       currentRun = 1;
     }
@@ -172,11 +176,9 @@ export async function GET(req: NextRequest) {
     try {
       const activeDates = await fetchActiveDates(
         session.githubLogin,
-        session.accessToken
+        session.accessToken,
       );
-      return Response.json(
-        calculateStreakFromDates(activeDates, freezeDates)
-      );
+      return Response.json(calculateStreakFromDates(activeDates, freezeDates));
     } catch {
       return Response.json({ error: "GitHub API error" }, { status: 502 });
     }
@@ -193,13 +195,13 @@ export async function GET(req: NextRequest) {
         githubId: session.githubId,
         githubLogin: session.githubLogin,
       },
-      appUserId
+      appUserId,
     );
 
     const dateResults = await Promise.allSettled(
       accounts.map((account) =>
-        fetchActiveDates(account.githubLogin, account.token)
-      )
+        fetchActiveDates(account.githubLogin, account.token),
+      ),
     );
 
     const unifiedDates = new Set<string>();

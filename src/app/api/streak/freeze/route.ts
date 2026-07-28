@@ -35,7 +35,10 @@ export async function GET() {
 
   const hasFreeze = Array.isArray(pending) && pending.length > 0;
 
-  return Response.json({ hasFreeze, freezeDate: hasFreeze ? pending![0].freeze_date : null });
+  return Response.json({
+    hasFreeze,
+    freezeDate: hasFreeze ? pending![0].freeze_date : null,
+  });
 }
 
 // POST /api/streak/freeze
@@ -66,7 +69,7 @@ export async function POST() {
     if (error.code === "23505") {
       return Response.json(
         { error: "You already have an unused streak freeze." },
-        { status: 409 }
+        { status: 409 },
       );
     }
     return Response.json({ error: "Failed to apply freeze." }, { status: 500 });
@@ -97,7 +100,8 @@ export async function DELETE() {
     .eq("user_id", user.id)
     .eq("freeze_date", todayStr());
 
-  if (error) return Response.json({ error: "Failed to cancel freeze" }, { status: 500 });
+  if (error)
+    return Response.json({ error: "Failed to cancel freeze" }, { status: 500 });
 
   return Response.json({ success: true });
 }

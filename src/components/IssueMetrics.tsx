@@ -24,8 +24,8 @@ export default function IssueMetrics() {
       .then((data: IssueData) => setMetrics(data))
       .catch(() =>
         setError(
-          "We couldn't load your Issues analytics right now. Please try again in a moment."
-        )
+          "We couldn't load your Issues analytics right now. Please try again in a moment.",
+        ),
       )
       .finally(() => setLoading(false));
   };

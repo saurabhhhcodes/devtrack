@@ -11,7 +11,9 @@ export default function NotFound() {
             </span>
           </div>
         </div>
-        <h1 className="mb-2 text-4xl font-bold text-[var(--card-foreground)]">404</h1>
+        <h1 className="mb-2 text-4xl font-bold text-[var(--card-foreground)]">
+          404
+        </h1>
         <h2 className="mb-4 text-xl font-semibold text-[var(--card-foreground)]">
           Oops! Page not found
         </h2>

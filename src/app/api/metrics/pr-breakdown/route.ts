@@ -27,7 +27,7 @@ export async function GET() {
         Accept: "application/vnd.github+json",
       },
       cache: "no-store",
-    }
+    },
   );
 
   if (!res.ok) {
@@ -36,7 +36,10 @@ export async function GET() {
 
   const data = (await res.json()) as { items: PRItem[] };
 
-  let draft = 0, open = 0, merged = 0, closed = 0;
+  let draft = 0,
+    open = 0,
+    merged = 0,
+    closed = 0;
 
   for (const pr of data.items) {
     if (pr.state === "open" && pr.draft) {

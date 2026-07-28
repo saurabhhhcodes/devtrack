@@ -26,10 +26,12 @@ export default function PinnedRepos() {
         return r.json();
       })
       .then((data: { pinnedRepos?: PinnedRepo[] }) =>
-        setPinnedRepos(data.pinnedRepos ?? [])
+        setPinnedRepos(data.pinnedRepos ?? []),
       )
       .catch(() =>
-        setError("We couldn't load your pinned repositories right now. Please try again in a moment.")
+        setError(
+          "We couldn't load your pinned repositories right now. Please try again in a moment.",
+        ),
       )
       .finally(() => setLoading(false));
   }, []);
@@ -46,7 +48,10 @@ export default function PinnedRepos() {
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-24 rounded-lg bg-[var(--card-muted)] animate-pulse" />
+            <div
+              key={i}
+              className="h-24 rounded-lg bg-[var(--card-muted)] animate-pulse"
+            />
           ))}
         </div>
       ) : error ? (
